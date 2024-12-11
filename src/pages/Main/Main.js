@@ -10,7 +10,7 @@ const Main = () => {
     };
       
     return (
-        <div>
+        <div onTouchStart="">
             <div className="header">
                 <h1>Mi Diario Interactivo</h1>
             </div>
