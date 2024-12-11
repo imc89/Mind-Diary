@@ -9,22 +9,26 @@ const Main = () => {
         setDate(newDate);
     };
 
+    // We add the effect of the focus since on mobile devices it is not functional from css
+    // Añadimos el efecto del focus ya que en dispositivos moviles no es funcional desde css
     useEffect(() => {
+        // Select all the elements with the class .react-calendar__tile
         // Selecciona todos los elementos con la clase .react-calendar__tile
         const tiles = document.querySelectorAll('.react-calendar__tile');
 
-        // Itera sobre cada tile y agrega el manejador de clic
+        // runs through each tile and add the click handler
+        // Itera sobre cada tile y agrega el manejador de click
         tiles.forEach((tile) => {
-          tile.addEventListener('click', () => {
-            tile.focus(); // Esto asegura que el tile obtenga el foco cuando se hace clic
-          });
+            tile.addEventListener('click', () => {
+                tile.focus(); // add focus on each tile
+            });
         });
-      }, []);
-      
+    }, []);
+
     return (
         <div>
             <div className="header">
-                <h1>Mi Diario Interactivo</h1>
+                <h1>Mind Diary</h1>
             </div>
             <Calendar
                 onChange={onDateChange}

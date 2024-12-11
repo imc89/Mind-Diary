@@ -1,6 +1,11 @@
 /* HEADER */
 /* CABECERA */
-.header {}
+.header h1 {
+    font-family: "Nanum Pen Script";
+    font-size: 120px;
+    text-align: center;
+    margin: 25px;
+}
 
 /* NAVIGATION AND CALENDAR CONTAINER */
 /* CONTENEDOR DE NAVEGACION Y CALENDARIO */
@@ -74,11 +79,22 @@
 
 /* Media Queries */
 @media (max-width: 600px) {
+    .header h1 {
+        font-family: "Nanum Pen Script";
+        font-size: 70px;
+        text-align: center;
+        margin: 25px;
+    }
+
     .react-calendar__navigation {
         display: flex;
         flex-direction: row;
         align-items: center;
         margin: 0 auto;
         width: 350px;
+    }
+
+    .react-calendar__tile:focus {
+        border: none;
     }
 }
