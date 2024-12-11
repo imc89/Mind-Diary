@@ -1,0 +1,100 @@
+/* HEADER */
+/* CABECERA */
+.header h1 {
+    font-family: "Nanum Pen Script";
+    font-size: 120px;
+    text-align: center;
+    margin: 25px;
+}
+
+/* NAVIGATION AND CALENDAR CONTAINER */
+/* CONTENEDOR DE NAVEGACION Y CALENDARIO */
+.react-calendar {}
+
+.react-calendar button {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid white;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    /* TRANSITION FOR THE EDGE AND COLOR- TRANSICION PARA EL BORDE Y EL COLOR */
+    transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+/* HOVER EDGE COLOR CHANGE */
+/* CAMBIO DE COLOR DEL BORDE EN HOVER */
+.react-calendar button:hover {
+    border-color: #3498db;
+}
+
+/* CALENDAR NAVIGATION BUTTONS */
+/* BOTONES DE NAVEGACIÓN DEL CALENDARIO */
+.react-calendar__navigation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 auto;
+    width: 400px;
+}
+
+/* BOTONES DE NAVEGACIÓN DEL CALENDARIO */
+/* BOTONES DE NAVEGACIÓN DEL CALENDARIO */
+.react-calendar__navigation__arrow {
+    margin: 5px;
+}
+
+/* CALENDAR CONTAINER  */
+/* CONTENEDOR DEL CALENDARIO  */
+.react-calendar__viewContainer {
+    margin: 25px;
+}
+
+/* ROW OF DAYS OF DAYS */
+/* FILA DE NOMBRES DE DÍAS */
+.react-calendar__month-view__weekdays {}
+
+/*EACH BUTTON THAT BELONGS TO ONE DAY*/
+/*CADA BOTON QUE PERTENECE A UN DIA*/
+.react-calendar__tile {}
+
+/* BACKGROUND COLOR CHANGE IN HOVER BUTTONS*/
+/* CAMBIO DE COLOR DE FONDE EN LOS BOTONES EN HOVER */
+.react-calendar__tile button:hover {
+    background-color: #117d16;
+}
+
+/* EFFECT IN CALENDAR FOCUS BUTTONS */
+/* EFECTO EN BOTONES DEL CALENDARIO FOCUS */
+.react-calendar__tile:focus {
+    box-shadow: black 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.react-calendar__tile:active {
+    box-shadow: black 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    .header h1 {
+        font-family: "Nanum Pen Script";
+        font-size: 70px;
+        text-align: center;
+        margin: 25px;
+    }
+
+    .react-calendar__navigation {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0 auto;
+        width: 350px;
+    }
+
+    .react-calendar__tile:focus {
+        border: none;
+    }
+}
