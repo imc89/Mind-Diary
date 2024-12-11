@@ -8,9 +8,21 @@ const Main = () => {
     const onDateChange = (newDate) => {
         setDate(newDate);
     };
+
+    useEffect(() => {
+        // Selecciona todos los elementos con la clase .react-calendar__tile
+        const tiles = document.querySelectorAll('.react-calendar__tile');
+
+        // Itera sobre cada tile y agrega el manejador de clic
+        tiles.forEach((tile) => {
+          tile.addEventListener('click', () => {
+            tile.focus(); // Esto asegura que el tile obtenga el foco cuando se hace clic
+          });
+        });
+      }, []);
       
     return (
-        <div onTouchStart="">
+        <div>
             <div className="header">
                 <h1>Mi Diario Interactivo</h1>
             </div>
