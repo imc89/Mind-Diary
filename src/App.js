@@ -10,16 +10,14 @@ import Navbar from './components/Navbar';
 
 function App() {
     return (
-        <Router>
-            <div>
-                <Navbar />
-                <Routes>
-                    <Route exact path="/" element={<Main/>} />
-                    <Route path="/search" element={<Search/>} />
-                    <Route path="/image" element={<Images/>} />
-                    <Route path="/graph" element={<Graph/>} />
-                </Routes>
-            </div>
+        <Router basename="/Mind-Diary">
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<Main />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/image" element={<Images />} />
+                <Route path="/graph" element={<Graph />} />
+            </Routes>
         </Router>
     );
 }
