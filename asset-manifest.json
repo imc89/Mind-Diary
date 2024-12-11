@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/Mind-Diary/static/css/main.f855e6bc.css",
+    "main.js": "/Mind-Diary/static/js/main.af9984e0.js",
+    "static/media/logo.svg": "/Mind-Diary/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/Mind-Diary/index.html",
+    "main.f855e6bc.css.map": "/Mind-Diary/static/css/main.f855e6bc.css.map",
+    "main.af9984e0.js.map": "/Mind-Diary/static/js/main.af9984e0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.af9984e0.js"
+  ]
+}
