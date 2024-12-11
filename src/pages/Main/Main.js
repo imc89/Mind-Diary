@@ -1,29 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Calendar from 'react-calendar';
+import Focus from '../../utils/Focus';
 import './Main.css';
 
 const Main = () => {
+    // FOCUS BEHAVIOR OF CALENDAR BUTTONS FOR MOBILE DEVICES.
+    // COMPORTAMIENTO FOCUS DE LOS BOTONES DEL CALENDARIO PARA DISPOSITIVOS MOVILES.
+    Focus();
     const [date, setDate] = useState(new Date());
 
     const onDateChange = (newDate) => {
         setDate(newDate);
     };
 
-    // We add the effect of the focus since on mobile devices it is not functional from css
-    // Añadimos el efecto del focus ya que en dispositivos moviles no es funcional desde css
-    useEffect(() => {
-        // Select all the elements with the class .react-calendar__tile
-        // Selecciona todos los elementos con la clase .react-calendar__tile
-        const tiles = document.querySelectorAll('.react-calendar__tile');
-
-        // runs through each tile and add the click handler
-        // Itera sobre cada tile y agrega el manejador de click
-        tiles.forEach((tile) => {
-            tile.addEventListener('click', () => {
-                tile.focus(); // add focus on each tile
-            });
-        });
-    }, []);
 
     return (
         <div>
