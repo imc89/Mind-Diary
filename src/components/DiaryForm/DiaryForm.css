@@ -1,0 +1,159 @@
+/* Estilos generales para el formulario de entrada */
+.diary-form {
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    flex: 1;
+    max-width: 50%;
+    /* Limita el ancho al 50% */
+    text-align: left;
+  }
+  
+  .diary-form h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .diary-form textarea {
+    width: 97%;
+    height: 120px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    resize: none;
+  }
+  
+  /* Estilos para el botón "Guardar Entrada" */
+  .diary-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .diary-form button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Estilos para el input de imagen */
+  .file-upload {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .file-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-label:hover {
+    background-color: #45a049;
+  }
+  
+  .upload-icon {
+    margin-right: 10px;
+  }
+  
+  /* Imagen previsualizada */
+  .uploaded-image {
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  .mood-container {
+    display: flex; /* Hace que los elementos hijos se alineen en línea */
+    align-items: center; /* Alinea verticalmente el contenido en el centro */
+    gap: 10px; /* Espaciado entre el botón y el recuadro */
+  }
+  
+  .mood-button {
+    margin-top: 0;
+    width: 45px !important;
+    margin-right: 0px !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #4CAF50;
+  }
+  
+  .mood-button:hover {
+    color: #45a049;
+  }
+  
+  .mood-box {
+    width: 40px; /* El mismo tamaño que el botón */
+    height: 40px; /* El mismo tamaño que el botón */
+    border: 2px solid black; /* Borde sólido negro */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: transparent; /* Fondo inicial transparente */
+  }
+  
+  .moods {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Cambiado a center para alinear el contenido horizontalmente */
+  }
+  
+  .mood-span {
+    display: flex;
+    justify-content: center; /* Centra el contenido del span horizontalmente */
+    width: 100%; /* Asegura que el span tome todo el ancho del contenedor padre */
+  }
+  
+  /* Media Queries para dispositivos móviles */
+  @media (max-width: 600px) {
+    .diary-form {
+      padding: 15px;
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .diary-form textarea {
+      width: 95%;
+      font-size: 14px;
+    }
+  
+    .diary-form button {
+      padding: 10px;
+      font-size: 14px;
+    }
+  
+    .file-label {
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+  
+    .uploaded-image {
+      max-width: 90%;
+    }
+  }
+  

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
+// UTILS
 import Focus from '../../utils/Focus';
+// COMPONENTS
+import DiaryForm from '../../components/DiaryForm/DiaryForm'
+// STYLES
 import './Main.css';
 
 const Main = () => {
@@ -24,6 +28,7 @@ const Main = () => {
                 value={date}
                 showNeighboringMonth={false}
             />
+            <DiaryForm  date={date}/>
         </div>
     );
 };
