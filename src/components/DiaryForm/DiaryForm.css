@@ -88,47 +88,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
   }
-  .mood-container {
-    display: flex; /* Hace que los elementos hijos se alineen en línea */
-    align-items: center; /* Alinea verticalmente el contenido en el centro */
-    gap: 10px; /* Espaciado entre el botón y el recuadro */
-  }
-  
-  .mood-button {
-    margin-top: 0;
-    width: 45px !important;
-    margin-right: 0px !important;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #4CAF50;
-  }
-  
-  .mood-button:hover {
-    color: #45a049;
-  }
-  
-  .mood-box {
-    width: 40px; /* El mismo tamaño que el botón */
-    height: 40px; /* El mismo tamaño que el botón */
-    border: 2px solid black; /* Borde sólido negro */
-    border-radius: 5px; /* Bordes redondeados */
-    background-color: transparent; /* Fondo inicial transparente */
-  }
-  
-  .moods {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Cambiado a center para alinear el contenido horizontalmente */
-  }
-  
-  .mood-span {
-    display: flex;
-    justify-content: center; /* Centra el contenido del span horizontalmente */
-    width: 100%; /* Asegura que el span tome todo el ancho del contenedor padre */
-  }
-  
+ 
   /* Media Queries para dispositivos móviles */
   @media (max-width: 600px) {
     .diary-form {
@@ -150,10 +110,6 @@
     .file-label {
       padding: 10px 15px;
       font-size: 14px;
-    }
-  
-    .uploaded-image {
-      max-width: 90%;
     }
   }
   
