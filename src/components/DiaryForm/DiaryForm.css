@@ -111,10 +111,4 @@
     padding: 10px 15px;
     font-size: 14px;
   }
-
-  textarea {
-    font-size: 16px;
-    -webkit-text-size-adjust: none;
-    /* Deshabilita el ajuste automático de tamaño de texto en iOS */
-  }
 }
