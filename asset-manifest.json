@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Mind-Diary/static/css/main.b8c82d3f.css",
-    "main.js": "/Mind-Diary/static/js/main.bbe8d23a.js",
+    "main.css": "/Mind-Diary/static/css/main.ec50c600.css",
+    "main.js": "/Mind-Diary/static/js/main.45eda86d.js",
     "index.html": "/Mind-Diary/index.html",
-    "main.b8c82d3f.css.map": "/Mind-Diary/static/css/main.b8c82d3f.css.map",
-    "main.bbe8d23a.js.map": "/Mind-Diary/static/js/main.bbe8d23a.js.map"
+    "main.ec50c600.css.map": "/Mind-Diary/static/css/main.ec50c600.css.map",
+    "main.45eda86d.js.map": "/Mind-Diary/static/js/main.45eda86d.js.map"
   },
   "entrypoints": [
-    "static/css/main.b8c82d3f.css",
-    "static/js/main.bbe8d23a.js"
+    "static/css/main.ec50c600.css",
+    "static/js/main.45eda86d.js"
   ]
 }
