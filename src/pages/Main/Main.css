@@ -65,14 +65,9 @@
     background-color: #117d16;
 }
 
-/* EFFECT IN CALENDAR FOCUS BUTTONS */
-/* EFECTO EN BOTONES DEL CALENDARIO FOCUS */
-.react-calendar__tile:focus {
-    box-shadow: black 0 3px 7px inset;
-    transform: translateY(2px);
-}
-
-.react-calendar__tile:active {
+/* ACTIVE TILE EFFECT */
+/* EFECTO DE LA CASILLA ACTIVA */
+.react-calendar__tile--active {
     box-shadow: black 0 3px 7px inset;
     transform: translateY(2px);
 }

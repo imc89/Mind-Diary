@@ -16,7 +16,7 @@ const DiaryForm = ({ date }) => {
         e.preventDefault(); // Prevenimos el comportamiento por defecto del formulario
 
         const newEntry = {
-            date: date.toISOString(), // Convertimos la fecha a una cadena en formato ISO date.toLocaleDateString("en-CA")
+            date:  date.toLocaleDateString("en-CA"), // Convertimos la fecha a una cadena en formato ISO date.toLocaleDateString("en-CA")
             entry, // Texto de la entrada
             image // URL de la imagen
         };

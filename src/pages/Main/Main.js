@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-// UTILS
-import Focus from '../../utils/Focus';
 // COMPONENTS
 import DiaryForm from '../../components/DiaryForm/DiaryForm'
 // STYLES
 import './Main.css';
 
 const Main = () => {
-    // FOCUS BEHAVIOR OF CALENDAR BUTTONS FOR MOBILE DEVICES.
-    // COMPORTAMIENTO FOCUS DE LOS BOTONES DEL CALENDARIO PARA DISPOSITIVOS MOVILES.
-    Focus();
     const [date, setDate] = useState(new Date());
 
     const onDateChange = (newDate) => {
         setDate(newDate);
     };
-
 
     return (
         <div>
@@ -28,7 +22,7 @@ const Main = () => {
                 value={date}
                 showNeighboringMonth={false}
             />
-            <DiaryForm  date={date}/>
+            <DiaryForm date={date} />
         </div>
     );
 };
