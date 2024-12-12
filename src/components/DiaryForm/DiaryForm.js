@@ -62,6 +62,11 @@ const DiaryForm = ({ date }) => {
         }
     };
 
+    const handleFocus = () => {
+        // Prevenir el zoom al enfocar el textarea
+        document.body.style.zoom = 'reset';  // Ajuste para evitar el zoom
+    };
+    
     return (
         <div className="diary-form">
             <div className="header">
@@ -70,6 +75,7 @@ const DiaryForm = ({ date }) => {
             <textarea
                 value={entry} // Asignamos el valor del estado de la entrada al textarea
                 onChange={(e) => setEntry(e.target.value)} // Actualizamos el estado de la entrada al cambiar el valor del textarea
+                onFocus={handleFocus}
                 placeholder="Escribe tu entrada aquí..."
             ></textarea>
             <div className="file-upload">
