@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 // COMPONENTS
-import DiaryForm from '../../components/DiaryForm/DiaryForm'
+import EntryContainer from '../../components/EntryContainer/EntryContainer'
 // STYLES
 import './Main.css';
 
@@ -22,7 +22,8 @@ const Main = () => {
                 value={date}
                 showNeighboringMonth={false}
             />
-            <DiaryForm date={date} />
+
+            <EntryContainer date={date} />
         </div>
     );
 };
