@@ -16,7 +16,7 @@ const DiaryForm = ({ date }) => {
         e.preventDefault(); // Prevenimos el comportamiento por defecto del formulario
 
         const newEntry = {
-            date: date.toLocaleDateString("en-CA"), // Convertimos la fecha a una cadena en formato ISO date.toLocaleDateString("en-CA")
+            date:  date.toLocaleDateString("en-CA"), // Convertimos la fecha a una cadena en formato ISO date.toLocaleDateString("en-CA")
             entry, // Texto de la entrada
             image // URL de la imagen
         };
@@ -62,15 +62,6 @@ const DiaryForm = ({ date }) => {
         }
     };
 
-    const handleFocus = () => {
-        // Prevenir el zoom al enfocar el textarea
-        document.body.style.zoom = 'reset';  // Ajuste para evitar el zoom
-    };
-    // Restaurar el estilo cuando se pierde el foco
-    const handleBlur = () => {
-        document.body.style.zoom = '1';
-    };
-    
     return (
         <div className="diary-form">
             <div className="header">
@@ -79,8 +70,6 @@ const DiaryForm = ({ date }) => {
             <textarea
                 value={entry} // Asignamos el valor del estado de la entrada al textarea
                 onChange={(e) => setEntry(e.target.value)} // Actualizamos el estado de la entrada al cambiar el valor del textarea
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 placeholder="Escribe tu entrada aquí..."
             ></textarea>
             <div className="file-upload">
