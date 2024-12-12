@@ -15,8 +15,10 @@ const DiaryForm = ({ date }) => {
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevenimos el comportamiento por defecto del formulario
 
+        const userLocale = navigator.language || navigator.userLanguage; // Obtiene la configuración regional del navegador
+
         const newEntry = {
-            date:  date.toLocaleDateString("en-CA"), // Convertimos la fecha a una cadena en formato ISO date.toLocaleDateString("en-CA")
+            date:  date.toLocaleDateString(userLocale), // Convertimos la fecha a una cadena en formato ISO date.toLocaleDateString("en-CA")
             entry, // Texto de la entrada
             image // URL de la imagen
         };
