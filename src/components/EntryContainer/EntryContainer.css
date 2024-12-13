@@ -1,0 +1,17 @@
+.entry-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 20px 10px 20px 10px;
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    .entry-container {
+        flex-direction: column;
+        align-items: center;
+        /* Centramos los elementos dentro de entry-container */
+        justify-content: center;
+    }
+
+}
