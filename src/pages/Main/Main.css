@@ -75,9 +75,28 @@
 /* EFFECT OF THE DISABLED TILES */
 /* EFECTO DE LAS CASILLAS DESACTIVADAS */
 .react-calendar__tile:disabled,
-.react-calendar__tile[disabled]{
+.react-calendar__tile[disabled] {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+/* STYLES FOR THE DAYS WITH ENTRANCE */
+/* ESTILOS PARA LOS DÍAS CON ENTRADA */
+.react-calendar__tile.has-entry {
+    border-color: red;
+    position: relative;
+}
+
+.has-entry::after {
+    content: " ";
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Media Queries */
@@ -101,23 +120,3 @@
         border: none;
     }
 }
-
-.react-calendar__tile.has-entry {
-    border-color: red;
-    position: relative; /* Necesario para posicionar el círculo dentro de la celda */
-
-    /* Borde rojo para los días con entrada */
-  }
-  /* Estilos para los días con entrada */
-.has-entry::after {
-    content: " ";
-    display: block;
-    width: 8px;
-    height: 8px;
-    background-color: red;
-    border-radius: 50%;
-    margin-top: 5px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
