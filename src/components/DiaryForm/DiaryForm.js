@@ -86,6 +86,18 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
             // CERRAMOS LA INSTANCIA DE LA BASE DE DATOS UNA VEZ QUE LA TRANSACCIÓN SE COMPLETA
             transaction.oncomplete = () => db.close();
         };
+
+        // CONTINGENCY METHOD TO CREATE THE BBDD 'ENTRIES' IN CASE IT IS DELETED BY HAND AT THE INIT OF THE APPLICATION
+        // METODO DE CONTINGENCIA PARA CREAR LA BBDD 'ENTRIES' EN CASO DE QUE SE BORRE A MANO AL INICIAR LA APLICACION
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            // WE CREATE THE WAREHOUSE OF 'ENTRIES' OBJECTS
+            // CREAMOS EL ALMACÉN DE OBJETOS 'ENTRIES'
+            const objectStore = db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true });
+            // WE CREATE AN INDEX IN THE 'DATE' FIELD
+            // CREAMOS UN ÍNDICE EN EL CAMPO 'DATE'
+            objectStore.createIndex('date', 'date', { unique: false });
+        };
     };
 
     const handleFileChange = (e) => {
