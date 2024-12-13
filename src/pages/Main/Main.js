@@ -1,95 +1,85 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// Importing React and the necessary hooks
-// Importando React y los hooks necesarios
 
 // COMPONENTS
 // COMPONENTES
 import Calendar from 'react-calendar';
-// Importing Calendar component
-// Importando el componente Calendar
 import EntryContainer from '../../components/EntryContainer/EntryContainer';
-// Importing EntryContainer component
-// Importando el componente EntryContainer
+// VARIABLES
 import { userLocale } from '../../utils/utilsValues';
-// Importing userLocale for date formatting
-// Importando userLocale para el formato de fecha
 
 // STYLES
 // ESTILOS
 import './Main.css';
-// Importing the CSS for styling
-// Importando el CSS para los estilos
 
 const Main = () => {
+    // STATE FOR THE SELECTED DATE IN THE CALENDAR
     // ESTADO PARA LA FECHA SELECCIONADA EN EL CALENDARIO
-    // STATE for the selected date in the calendar
     const [date, setDate] = useState(new Date());
+    // STATE FOR STORING DIARY ENTRIES
     // ESTADO PARA ALMACENAR LAS ENTRADAS DEL DIARIO
-    // STATE for storing diary entries
     const [entries, setEntries] = useState({});
-
+    // FUNCTION TO OPEN THE DATABASE
     // FUNCIÓN PARA ABRIR LA BASE DE DATOS
-    // FUNCTION to open the database
     const openDatabase = () => {
         return new Promise((resolve, reject) => {
+            // OPEN A CONNECTION TO THE INDEXEDDB 'DIARYDB'
+            // ABRE UNA CONEXION CON LA BASE DE DATOS INDEXEDDB 'DIARYDB'
             const request = indexedDB.open('diaryDB', 1);
-            // Open a connection to the IndexedDB 'diaryDB'
-            // Abre una conexión con la base de datos IndexedDB 'diaryDB'
 
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
-                // When upgrading the DB, create the 'entries' object store if it doesn't exist
-                // Al actualizar la base de datos, crea el almacén de objetos 'entries' si no existe
+                // WHEN UPGRADING THE DB, CREATE THE 'ENTRIES' OBJECT STORE IF IT DOESN'T EXIST
+                // AL ACTUALIZAR LA BASE DE DATOS, CREA EL ALMACEN DE OBJETOS 'ENTRIES' SI NO EXISTE
                 if (!db.objectStoreNames.contains('entries')) {
                     db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true });
-                    // Creates the 'entries' store with 'id' as the primary key
-                    // Crea el almacén 'entries' con 'id' como clave primaria
+                    // CREATES THE 'ENTRIES' STORE WITH 'ID' AS THE PRIMARY KEY
+                    // CREA EL ALMACEN 'ENTRIES' CON 'ID' COMO CLAVE PRIMARIA
                 }
             };
 
             request.onsuccess = (event) => {
                 resolve(event.target.result);
-                // If the request is successful, resolve the promise with the result
-                // Si la solicitud es exitosa, resuelve la promesa con el resultado
+                // IF THE REQUEST IS SUCCESSFUL, RESOLVE THE PROMISE WITH THE RESULT
+                // SI LA SOLICITUD ES EXITOSA, RESUELVE LA PROMESA CON EL RESULTADO
+
             };
 
             request.onerror = (event) => {
                 reject(event.target.error);
-                // If an error occurs, reject the promise with the error
-                // Si ocurre un error, rechaza la promesa con el error
+                // IF AN ERROR OCCURS, REJECT THE PROMISE WITH THE ERROR
+                // SI OCURRE UN ERROR, RECHAZA LA PROMESA CON EL ERROR
             };
         });
     };
 
-    // FUNCIÓN PARA OBTENER TODAS LAS ENTRADAS DE LA BASE DE DATOS
-    // FUNCTION to fetch all entries from the database
+    // FUNCTION TO FETCH ALL ENTRIES FROM THE DATABASE
+    // FUNCION PARA OBTENER TODAS LAS ENTRADAS DE LA BASE DE DATOS
     const fetchAllEntries = (db) => {
         return new Promise((resolve, reject) => {
             const transaction = db.transaction('entries', 'readonly');
             const store = transaction.objectStore('entries');
             const request = store.getAll();
-            // Start a transaction to read from the 'entries' store
-            // Inicia una transacción para leer del almacén 'entries'
-
+            // START A TRANSACTION TO READ FROM THE 'ENTRIES' STORE
+            // INICIA UNA TRANSACCION PARA LEER DEL ALMACEN 'ENTRIES'
             request.onsuccess = (event) => {
                 resolve(event.target.result);
                 db.close()
-                // If the request is successful, resolve the promise with the result
-                // Si la solicitud es exitosa, resuelve la promesa con el resultado
+                // IF THE REQUEST IS SUCCESSFUL, RESOLVE THE PROMISE WITH THE RESULT
+                // SI LA SOLICITUD ES EXITOSA, RESUELVE LA PROMESA CON EL RESULTADO
             };
 
             request.onerror = (event) => {
                 reject(event.target.error);
                 db.close()
-                // If an error occurs, reject the promise with the error
-                // Si ocurre un error, rechaza la promesa con el error
+                // IF AN ERROR OCCURS, REJECT THE PROMISE WITH THE ERROR
+                // SI OCURRE UN ERROR, RECHAZA LA PROMESA CON EL ERROR
             };
-            
+
         });
     };
 
-    // Función para actualizar las entradas por día después de que se envíe una nueva entrada
-    // FUNCTION to update the entries by day after a new entry is submitted
+    // FUNCTION TO UPDATE THE ENTRIES BY DAY AFTER A NEW ENTRY IS SUBMITTED
+    // FUNCION PARA MAPEAR LAS ENTRADAS QUE TIENEN ENTRADAS Y ASOCIARLAS CON HAS-ENTRY
     const onEntrySubmit = useCallback(async () => {
         const db = await openDatabase();
         const allEntries = await fetchAllEntries(db);
@@ -98,59 +88,58 @@ const Main = () => {
         const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
         const daysInMonth = [];
-        // Loop through the days of the month to generate the list of dates
-        // Bucle a través de los días del mes para generar la lista de fechas
+        // LOOP THROUGH THE DAYS OF THE MONTH TO GENERATE THE LIST OF DATES
+        // BUCLE A TRAVES DE LOS DIAS DEL MES PARA GENERAR LA LISTA DE FECHAS
         for (let d = new Date(startOfMonth); d <= endOfMonth; d.setDate(d.getDate() + 1)) {
-            console.log(d)
             const entryDateString = new Date(d).toLocaleDateString(userLocale);
             daysInMonth.push(entryDateString);
-            // Push each date of the month as a string in the correct locale format
-            // Agrega cada fecha del mes como una cadena en el formato adecuado del locale
+            // PUSH EACH DATE OF THE MONTH AS A STRING IN THE CORRECT LOCALE FORMAT
+            // AGREGA CADA FECHA DEL MES COMO UNA CADENA EN EL FORMATO ADECUADO DEL LOCALE
         }
 
-        const entriesByDay = daysInMonth.reduce((acc, day) => {
-            acc[day] = allEntries.some(entry => entry.date === day) ? 'has-entry' : '';
-            // For each day, check if there is an entry and mark it with 'has-entry' if it exists
-            // Para cada día, verifica si hay una entrada y marca con 'has-entry' si existe
-            return acc;
+        const entriesByDay = daysInMonth.reduce((iterator, day) => {
+            // .SOME() HAS THE FUNCTION TO SEE IF ANY ELEMENT OF THE INDEXEDDB ENTRIES COMPLIES THAT THE ITERATED DATE EXISTS BASED ON
+            // .SOME() SIRVE PARA VER SI ALGUN ELEMENTO DE LAS ENTRADAS DE INDEXEDDB CUMPLE QUE LA FECHA DE ITERADA EXISTA EN BASE
+            iterator[day] = allEntries.some(entry => entry.date === day) ? 'has-entry' : '';
+            // FOR EACH DAY, CHECK IF THERE IS AN ENTRY AND MARK IT WITH 'has-entry' IF IT EXISTS
+            // PARA CADA DIA, VERIFICA SI HAY UNA ENTRADA Y MARCA CON 'has-entry' SI EXISTE
+            return iterator;
         }, {});
-
+        // SET THE ENTRIES IN THE STATE WITH THE entriesByDay OBJECT
+        // ESTABLECE LAS ENTRADAS EN EL ESTADO CON EL OBJETO entriesByDay
         setEntries(entriesByDay);
-        // Set the entries in the state with the entriesByDay object
-        // Establece las entradas en el estado con el objeto entriesByDay
-    }, [date]); // onEntrySubmit solo cambia cuando 'date' cambia
-    // 'onEntrySubmit' only changes when 'date' changes
+        // 'ONENTRYSUBMIT' ONLY CHANGES WHEN 'DATE' CHANGES
+        // ONENTRYSUBMIT SOLO CAMBIA CUANDO 'DATE' CAMBIA
+    }, [date]);
 
-    // Cambiar la fecha seleccionada en el calendario
-    // FUNCTION to change the selected date in the calendar
+    // FUNCTION TO CHANGE THE SELECTED DATE IN THE CALENDAR
+    // CAMBIAR LA FECHA SELECCIONADA EN EL CALENDARIO
     const onDateChange = (newDate) => {
         setDate(newDate);
-        // Update the state with the new selected date
-        // Actualiza el estado con la nueva fecha seleccionada
+        // UPDATE THE STATE WITH THE NEW SELECTED DATE
+        // ACTUALIZA EL ESTADO CON LA NUEVA FECHA SELECCIONADA
     };
 
-    // Para deshabilitar días sin entradas (si es necesario)
-    // FUNCTION to disable days without entries (if needed)
+    // FUNCTION TO DISABLE DAYS WITHOUT ENTRIES (IF NEEDED)
+    // PARA DESHABILITAR DÍAS SIN ENTRADAS (SI ES NECESARIO)
     const tileDisabled = ({ date }) => {
         return date > new Date();
-        // Disable future dates in the calendar
-        // Deshabilita las fechas futuras en el calendario
+        // DISABLE FUTURE DATES IN THE CALENDAR
+        // DESHABILITA LAS FECHAS FUTURAS EN EL CALENDARIO
     };
 
     useEffect(() => {
-        onEntrySubmit(); // Llama a onEntrySubmit cuando el componente se monta o cambia 'date'
-        // Call onEntrySubmit when the component mounts or the 'date' changes
-        // Llama a onEntrySubmit cuando el componente se monta o cuando cambia 'date'
+        // CALL onEntrySubmit WHEN THE COMPONENT MOUNTS 
+        // LLAMA A onEntrySubmit CUANDO EL COMPONENTE SE MONTA 
+        onEntrySubmit();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // Dependencias del hook: 'date' y 'onEntrySubmit'
-    // Hook dependencies: 'date' and 'onEntrySubmit'
+    }, []);
 
     return (
         <div>
             <div className="header">
                 <h1>Mind Diary</h1>
-                {/* Rendering the title */}
-                {/* Renderizando el título */}
             </div>
             <Calendar
                 onChange={onDateChange}
@@ -159,20 +148,13 @@ const Main = () => {
                 tileClassName={({ date }) => {
                     const dateString = date.toLocaleDateString(userLocale);
                     return entries[dateString] || '';
-                    // Add the class 'has-entry' to the tile if there is an entry for that date
-                    // Agrega la clase 'has-entry' a la baldosa si hay una entrada para esa fecha
+                    // aqui entries es un array de objetos cada objeto es una fecha del mes con el valor si tiene has-entry o no
                 }}
                 tileDisabled={tileDisabled}
-                // Disable certain dates based on the tileDisabled function
-                // Deshabilitar ciertas fechas en función de la función tileDisabled
             />
             <EntryContainer date={date} onEntrySubmit={onEntrySubmit} />
-            {/* Rendering the EntryContainer component with the selected date and submit function */}
-            {/* Renderizando el componente EntryContainer con la fecha seleccionada y la función de envío */}
         </div>
     );
 };
 
 export default Main;
-// Exporting the Main component to be used elsewhere
-// Exportando el componente Main para ser utilizado en otros lugares

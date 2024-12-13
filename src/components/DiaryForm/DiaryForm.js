@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { FaFileUpload } from 'react-icons/fa';
-import  { userLocale }  from '../../utils/utilsValues';
+import { userLocale } from '../../utils/utilsValues';
 
 import './DiaryForm.css';
 
-const DiaryForm = ({ date, onEntrySubmit}) => {
+const DiaryForm = ({ date, onEntrySubmit }) => {
     // STATE FOR THE ENTRY TEXT
     // ESTADO PARA EL TEXTO DE LA ENTRADA
     const [entry, setEntry] = useState("");
     // STATE FOR THE IMAGE AND ITS PREVIEW
     // ESTADO PARA LA IMAGEN Y SU VISTA PREVIA
     const [image, setImage] = useState(null);
-    
+
 
     useEffect(() => {
         // WE VERIFY IF INDEXEDDB IS COMPATIBLE WITH THE BROWSER
@@ -29,62 +29,77 @@ const DiaryForm = ({ date, onEntrySubmit}) => {
         e.preventDefault();
 
         const newEntry = {
-            // WE CONVERT THE DATE TO A TOLOCALEDATESTRING DATE FORMAT.
-            // Convertimos la fecha a una toLocaleDateString
+            // WE CONVERT THE DATE TO A toLocaleDateString DATE FORMAT.
+            // CONVERTIMOS LA FECHA A UNA toLocaleDateString
             date: date.toLocaleDateString(userLocale),
             entry, // ENTRY TEXT // TEXTO DE LA ENTRADA
             image // IMAGE URL // URL DE LA IMAGEN
         };
 
-        // WE OPEN THE "DIARYDB" DATABASE WITH VERSION 1
-        // ABRIMOS LA BASE DE DATOS "DIARYDB" CON VERSIÓN 1
+        // WE OPEN THE "diaryDB" DATABASE WITH VERSION 1
+        // ABRIMOS LA BASE DE DATOS "diaryDB" CON VERSIÓN 1
         const request = window.indexedDB.open('diaryDB', 1);
 
-        // Manejamos el error al abrir la base de datos MODAL SI ES NECESARIO
-        // Manejamos el error al abrir la base de datos MODAL SI ES NECESARIO
+        // WE HANDLE THE ERROR WHEN OPENING THE MODAL DATABASE IF NECESSARY
+        // MANEJAMOS EL ERROR AL ABRIR LA BASE DE DATOS MODAL SI ES NECESARIO
         request.onerror = (event) => {
             console.error('Error al abrir la base de datos:', event.target.errorCode);
         };
 
-        request.onsuccess = (event) => { // Manejamos el éxito al abrir la base de datos
-            const db = event.target.result; // Obtenemos la instancia de la base de datos
-            const transaction = db.transaction(['entries'], 'readwrite'); // Iniciamos una transacción en modo de lectura y escritura
-            const objectStore = transaction.objectStore('entries'); // Obtenemos el almacén de objetos 'entries'
-            const addRequest = objectStore.add(newEntry); // Agregamos la nueva entrada al almacén de objetos
+        // WE HANDLE SUCCESS WHEN OPENING THE DATABASE
+        // MANEJAMOS EL ÉXITO AL ABRIR LA BASE DE DATOS
+        request.onsuccess = (event) => {
+            // WE GET THE DATABASE INSTANCE
+            // OBTENEMOS LA INSTANCIA DE LA BASE DE DATOS
+            const db = event.target.result;
+            // WE START A TRANSACTION IN READING AND WRITING MODE
+            // INICIAMOS UNA TRANSACCIÓN EN MODO DE LECTURA Y ESCRITURA
+            const transaction = db.transaction(['entries'], 'readwrite');
+            // WE GET THE DATABASE OF 'ENTRIES' OBJECTS
+            // OBTENEMOS EL ALMACÉN DE OBJETOS 'ENTRIES'
+            const objectStore = transaction.objectStore('entries');
+            // WE ADD THE NEW ENTRANCE TO THE OBJECT DADATABASE
+            // AGREGAMOS LA NUEVA ENTRADA AL ALMACÉN DE OBJETOS
+            const addRequest = objectStore.add(newEntry);
 
-            addRequest.onsuccess = () => { // Manejamos el éxito al guardar la entrada
+            // WE HANDLE SUCCESS BY SAVING THE ENTRANCE
+            // MANEJAMOS EL ÉXITO AL GUARDAR LA ENTRADA
+            addRequest.onsuccess = () => {
                 console.log('Entrada guardada correctamente.');
-                setEntry(''); // Limpiamos el estado de la entrada de texto
-                setImage(null); // Limpiamos el estado de la imagen
-                onEntrySubmit(newEntry);  // Llamamos a la función de actualización de entradas en el padre
+                // WE CLEAN THE STATUS OF THE TEXT INPUT
+                // LIMPIAMOS EL ESTADO DE LA ENTRADA DE TEXTO
+                setEntry('');
+                // WE CLEAN THE STATUS OF THE IMAGE
+                // LIMPIAMOS EL ESTADO DE LA IMAGEN
+                setImage(null);
+                // WE CALL THE ENTRY UPDATE FUNCTION IN THE PARENT
+                // LLAMAMOS A LA FUNCIÓN DE ACTUALIZACIÓN DE ENTRADAS EN EL PADRE
+                onEntrySubmit(newEntry);
             };
 
-            addRequest.onerror = (event) => { // Manejamos el error al guardar la entrada
+            // WE HANDLE THE ERROR BY SAVING THE ENTRANCE
+            // MANEJAMOS EL ERROR AL GUARDAR LA ENTRADA
+            addRequest.onerror = (event) => {
                 console.error('Error al guardar la entrada:', event.target.errorCode);
             };
-
-            transaction.oncomplete = () => db.close(); // Cerramos la instancia de la base de datos una vez que la transacción se completa
-        };
-
-        request.onupgradeneeded = (event) => { // Configuración de la base de datos en caso de que necesite ser creada o actualizada
-            const db = event.target.result;
-            const objectStore = db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true }); // Creamos el almacén de objetos 'entries'
-            objectStore.createIndex('date', 'date', { unique: false }); // Creamos un índice en el campo 'date'
+            // WE CLOSE THE DATABASE INSTANCE ONCE THE TRANSACTION IS COMPLETED
+            // CERRAMOS LA INSTANCIA DE LA BASE DE DATOS UNA VEZ QUE LA TRANSACCIÓN SE COMPLETA
+            transaction.oncomplete = () => db.close();
         };
     };
 
     const handleFileChange = (e) => {
         // WE VERIFY IF THERE IS A SELECTED FILE
         // VERIFICAMOS SI HAY UN ARCHIVO SELECCIONADO
-        if (e.target.files && e.target.files[0]) { 
+        if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             const reader = new FileReader();
             // WE UPDATE THE STATUS OF THE IMAGE WITH THE URL GENERATED BY FILEREADER
             // ACTUALIZAMOS EL ESTADO DE LA IMAGEN CON LA URL GENERADA POR FILEREADER
-            reader.onloadend = () => setImage(reader.result); 
+            reader.onloadend = () => setImage(reader.result);
             // WE READ THE FILE AS A DATA URL
             // LEEMOS EL ARCHIVO COMO UNA URL DE DATOS
-            reader.readAsDataURL(file); 
+            reader.readAsDataURL(file);
         }
     };
 
@@ -94,7 +109,7 @@ const DiaryForm = ({ date, onEntrySubmit}) => {
                 <h2>Entrada para: {new Date(date).toLocaleDateString()}</h2>
             </div>
             <textarea
-                value={entry} 
+                value={entry}
                 onChange={(e) => setEntry(e.target.value)}
                 placeholder="Escribe tu entrada aquí..."
             ></textarea>
@@ -104,7 +119,7 @@ const DiaryForm = ({ date, onEntrySubmit}) => {
                     accept="image/*"
                     className="file-input"
                     id="image-upload"
-                    onChange={handleFileChange} 
+                    onChange={handleFileChange}
                 />
                 <label htmlFor="image-upload" className="file-label">
                     <FaFileUpload className="upload-icon" /> Subir Imagen
