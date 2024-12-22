@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaFileUpload } from 'react-icons/fa';
 import { userLocale } from '../../utils/utilsValues';
+import MoodTracker from '../MoodTracker/MoodTracker'
+import { FaFileUpload } from 'react-icons/fa';
+import { FaFaceSmile, FaFaceAngry, FaFaceFlushed, FaFaceFrown, FaFaceFrownOpen, FaFaceGrin, FaFaceGrinBeamSweat, FaFaceGrinHearts, FaFaceMeh, FaFaceSadTear } from "react-icons/fa6";
+
 
 import './DiaryForm.css';
 
@@ -11,6 +14,16 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
     // STATE FOR THE IMAGE AND ITS PREVIEW
     // ESTADO PARA LA IMAGEN Y SU VISTA PREVIA
     const [image, setImage] = useState(null);
+    // STATE FOR MOOD AND ASSOCIATED COLOR
+    // ESTADO PARA EL HUMOR Y COLOR ASOCIADO
+    const [moodLabel, setMoodLabel] = useState('');
+    const [moodColor, setMoodColor] = useState('');
+    // STATE TO CHANGE THE MOOD BUTTON ICON
+    // ESTADO PARA CAMBIAR EL ICONO DEL BOTON MOOD
+    const [faceIcon, setFaceIcon] = useState('FaFaceSmile');
+    // ICONS TO CHANGE WHEN THE CURSOR PASSES OVER THE MOOD BUTTON
+    // ICONOS A CAMBIAR CUANDO EL CURSOR PASA POR ENCIMA DEL BOTON DE MOOD
+    const faces = ['FaFaceSmile', 'FaFaceAngry', 'FaFaceFlushed', 'FaFaceFrown', 'FaFaceFrownOpen', 'FaFaceGrin', 'FaFaceGrinBeamSweat', 'FaFaceGrinHearts', 'FaFaceMeh', 'FaFaceSadTear'];
 
 
     useEffect(() => {
@@ -33,6 +46,8 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
             // CONVERTIMOS LA FECHA A UNA toLocaleDateString
             date: date.toLocaleDateString(userLocale),
             entry, // ENTRY TEXT // TEXTO DE LA ENTRADA
+            moodLabel, // MOOD LABEL
+            moodColor,  // MOOD COLOR
             image // IMAGE URL // URL DE LA IMAGEN
         };
 
@@ -69,6 +84,12 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
                 // WE CLEAN THE STATUS OF THE TEXT INPUT
                 // LIMPIAMOS EL ESTADO DE LA ENTRADA DE TEXTO
                 setEntry('');
+                // WE CLEAN THE STATUS OF THE MOOD 
+                // LIMPIAMOS EL ESTADO DEL MOOD 
+                setMoodLabel('');
+                // WE CLEAN THE STATUS OF THE COLOR MOOD 
+                // LIMPIAMOS EL ESTADO DEL COLOR DEL MOOD 
+                setMoodColor('');
                 // WE CLEAN THE STATUS OF THE IMAGE
                 // LIMPIAMOS EL ESTADO DE LA IMAGEN
                 setImage(null);
@@ -115,11 +136,67 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         }
     };
 
+    // MOOD
+    const [modalOpen, setModalOpen] = useState(false);
+    const [data, setData] = useState({ label: '', color: '' });
+
+    const handleOpenModal = () => {
+        setModalOpen(true);
+    };
+
+    const handleSaveMood = (mood) => {
+        console.log('Mood saved:', mood);
+        setMoodLabel(mood.label);   // Guardamos el label del mood
+        setMoodColor(mood.color);   // Guardamos el color del mood
+        handleCloseModal()  // Close the modal after saving
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+    // 
+    const handleMouseEnter = () => {
+        const randomIndex = Math.floor(Math.random() * faces.length);
+        setFaceIcon(faces[randomIndex]);
+    };
+
+    // Crear el ícono dinámicamente
+    const renderIcon = (iconName) => {
+        const IconComponent = {
+            FaFaceSmile: FaFaceSmile,
+            FaFaceAngry: FaFaceAngry,
+            FaFaceFlushed: FaFaceFlushed,
+            FaFaceFrown: FaFaceFrown,
+            FaFaceFrownOpen: FaFaceFrownOpen,
+            FaFaceGrin: FaFaceGrin,
+            FaFaceGrinBeamSweat: FaFaceGrinBeamSweat,
+            FaFaceGrinHearts: FaFaceGrinHearts,
+            FaFaceMeh: FaFaceMeh,
+            FaFaceSadTear: FaFaceSadTear
+        }[iconName];
+        return <IconComponent />;
+    };
+
+
     return (
         <div className="diary-form">
             <div className="header">
                 <h2>Entrada para: {new Date(date).toLocaleDateString()}</h2>
             </div>
+            <div className="mood-container">
+                <button
+                    className="mood-button"
+                    onClick={handleOpenModal}
+                    onMouseEnter={handleMouseEnter}
+                >
+                    {renderIcon(faceIcon)}
+                </button>
+                <div className="mood-box" style={{ backgroundColor: moodColor }}></div>
+            </div>
+            <p className='mood-value'>{moodLabel}</p>  {/* Usar moodLabel en lugar de data.label */}
+
+            {modalOpen && <MoodTracker onSave={handleSaveMood} onClose={handleCloseModal} />}
+
             <textarea
                 value={entry}
                 onChange={(e) => setEntry(e.target.value)}
@@ -144,7 +221,7 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
                     <img src={image} alt="Imagen de la entrada" className="uploaded-image" />
                 </div>
             )}
-            <button onClick={handleSubmit}>
+            <button className="form-button" onClick={handleSubmit}>
                 Guardar Entrada
             </button>
 
