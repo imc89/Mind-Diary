@@ -53,8 +53,13 @@
 
 }
 
+.mood-controls {
+    width: 300px;
+    margin: 0 auto;
+}
+
 .accept-mood {
-    width: 100%;
+    width: 300px;
     padding: 12px;
     background-color: #4CAF50;
     color: white;
@@ -64,7 +69,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     display: block;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -80,41 +85,6 @@ input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
-
-.markers {
-    position: relative;
-    width: 290px;
-    height: 0;
-}
-
-.marker {
-    content: '';
-    position: absolute;
-    top: 5px;
-    width: 1px;
-    height: 5px;
-    background-color: #fff;
-}
-
-.marker:nth-child(1) {
-    left: 0%;
-}
-
-.marker:nth-child(2) {
-    left: 25%;
-}
-
-.marker:nth-child(3) {
-    left: 50%;
-}
-
-.marker:nth-child(4) {
-    left: 75%;
-}
-
-.marker:nth-child(5) {
-    left: 100%;
 }
 
 @keyframes pulsate {
@@ -143,4 +113,39 @@ input[type="range"] {
             inset 50px 0 300px var(--colorStart),
             inset -50px 0 300px var(--colorEnd);
     }
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    /* Ancho del thumb */
+    height: 25px;
+    /* Altura del thumb */
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #333;
+    /* Ajuste para centrar el thumb verticalmente */
+    transition: border-radius 1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+ border-radius: 10%;
+    /* Ajuste para centrar el thumb verticalmente */
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    .close-button {
+        font-size: 35px;
+    }
+    input[type="range"] {
+        height: 25px;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+        border-radius: 50%;
+           /* Ajuste para centrar el thumb verticalmente */
+       }
 }

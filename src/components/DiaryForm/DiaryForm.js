@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+// OBTAIN THE REGIONAL CONFIGURATION OF THE USER FROM utilsValues
+// OBTENER LA CONFIGURACIÓN REGIONAL DEL USUARIO DEL utilsValues
 import { userLocale } from '../../utils/utilsValues';
-import MoodTracker from '../MoodTracker/MoodTracker'
+// ICONS 
 import { FaFileUpload } from 'react-icons/fa';
 import { FaFaceSmile, FaFaceAngry, FaFaceFlushed, FaFaceFrown, FaFaceFrownOpen, FaFaceGrin, FaFaceGrinBeamSweat, FaFaceGrinHearts, FaFaceMeh, FaFaceSadTear } from "react-icons/fa6";
-
+// COMPONENTS
+import MoodTracker from '../MoodTracker/MoodTracker'
 
 import './DiaryForm.css';
 
@@ -138,7 +141,6 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
 
     // MOOD
     const [modalOpen, setModalOpen] = useState(false);
-    const [data, setData] = useState({ label: '', color: '' });
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -146,15 +148,20 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
 
     const handleSaveMood = (mood) => {
         console.log('Mood saved:', mood);
-        setMoodLabel(mood.label);   // Guardamos el label del mood
-        setMoodColor(mood.color);   // Guardamos el color del mood
-        handleCloseModal()  // Close the modal after saving
+         // Guardamos el label del mood
+        setMoodLabel(mood.label);  
+        // Guardamos el color del mood
+        setMoodColor(mood.color);   
+         // Cerrar la modal
+        handleCloseModal() 
     };
 
+    // METODO DE CIERRE DE LA MODAL
     const handleCloseModal = () => {
         setModalOpen(false);
     };
-    // 
+    
+    // METODO PARA CAMBIAR EL ICONO DE LA CARA EN EL BOTON DE ABRIR MODAL MOOD
     const handleMouseEnter = () => {
         const randomIndex = Math.floor(Math.random() * faces.length);
         setFaceIcon(faces[randomIndex]);
