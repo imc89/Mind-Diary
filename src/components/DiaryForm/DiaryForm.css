@@ -30,7 +30,7 @@
 }
 
 /* Estilos para el botón "Guardar Entrada" */
-.diary-form button {
+.form-button {
   width: 100%;
   padding: 12px;
   background-color: #4CAF50;
@@ -45,7 +45,7 @@
   margin-right: auto;
 }
 
-.diary-form button:hover {
+.form-button:hover {
   background-color: #45a049;
 }
 
@@ -89,6 +89,51 @@
   margin-bottom: 20px;
 }
 
+.mood-container {
+  display: flex;
+  /* Hace que los elementos hijos se alineen en línea */
+  gap: 10px;
+  /* Espaciado entre el botón y el recuadro */
+  justify-content: center;
+  align-items: flex-start;
+  /* Alinea verticalmente el contenido en el centro */
+}
+
+.mood-button {
+  width: 40px;
+  height: 40px;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+}
+
+.mood-box {
+  width: 35px;
+  /* El mismo tamaño que el botón */
+  height: 35px;
+  /* El mismo tamaño que el botón */
+  border: 2px solid black;
+  /* Borde sólido negro */
+  border-radius: 5px;
+  /* Bordes redondeados */
+  background-color: transparent;
+  /* Fondo inicial transparente */
+}
+
+.mood-value {
+  font-family: "Nanum Pen Script";
+  font-size: 30px;
+  text-align: center;
+  margin: 10px auto;
+  font-weight: bold;
+}
+
 /* Media Queries para dispositivos móviles */
 @media (max-width: 600px) {
   .diary-form {
@@ -102,7 +147,7 @@
     font-size: 14px;
   }
 
-  .diary-form button {
+  .form-button {
     padding: 10px;
     font-size: 14px;
   }

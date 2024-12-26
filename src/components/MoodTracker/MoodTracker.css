@@ -1,0 +1,151 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.modal-content {
+    background: rgba(1, 0, 0, 0.4);
+    border-radius: 50px;
+    padding: 90px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: red;
+}
+
+
+.animated-div {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    animation: pulsate 1.5s ease-in-out infinite;
+    margin: 30px auto;
+}
+
+.value-labels {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    font-family: "Nanum Pen Script";
+
+}
+
+.mood-controls {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.accept-mood {
+    width: 300px;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="range"] {
+    width: 300px;
+    height: 15px;
+    margin: 0;
+    margin-top: 40px;
+    border-radius: 10px;
+    background: linear-gradient(to right, #8e44ad, #2980b9, #1abc9c, #2ecc71, #fff700, #ff9b00);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes pulsate {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 10px #fff,
+            -10px 0 40px var(--colorStart),
+            10px 0 40px var(--colorEnd),
+            inset 0 0 25px #fff,
+            inset 25px 0 40px var(--colorStart),
+            inset -25px 0 40px var(--colorEnd),
+            inset 25px 0 150px var(--colorStart),
+            inset -25px 0 150px var(--colorEnd);
+    }
+
+    50% {
+        box-shadow:
+            0 0 20px #fff,
+            -20px 0 80px var(--colorStart),
+            20px 0 80px var(--colorEnd),
+            inset 0 0 50px #fff,
+            inset 50px 0 80px var(--colorStart),
+            inset -50px 0 80px var(--colorEnd),
+            inset 50px 0 300px var(--colorStart),
+            inset -50px 0 300px var(--colorEnd);
+    }
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    /* Ancho del thumb */
+    height: 25px;
+    /* Altura del thumb */
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #333;
+    /* Ajuste para centrar el thumb verticalmente */
+    transition: border-radius 1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+ border-radius: 10%;
+    /* Ajuste para centrar el thumb verticalmente */
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    .close-button {
+        font-size: 35px;
+    }
+    input[type="range"] {
+        height: 25px;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+        border-radius: 50%;
+           /* Ajuste para centrar el thumb verticalmente */
+       }
+}
