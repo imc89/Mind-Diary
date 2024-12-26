@@ -56,37 +56,37 @@ const MoodTracker = ({ onSave, onClose }) => {
         if (value === 0) {
             div.style.setProperty('--colorStart', colors[0]);
             div.style.setProperty('--colorEnd', colors[0]);
-        } else if (value > 0 && value < 16.66) {
+        } else if (value > 0 && value < 9) {
             div.style.setProperty('--colorStart', colors[0]);
             div.style.setProperty('--colorEnd', colors[1]);
-        } else if (value === 16.66) {
+        } else if (value >= 9 && value < 18) {
             div.style.setProperty('--colorStart', colors[1]);
             div.style.setProperty('--colorEnd', colors[1]);
-        } else if (value > 16.66 && value < 33.33) {
+        } else if (value > 18 && value < 27) {
             div.style.setProperty('--colorStart', colors[1]);
             div.style.setProperty('--colorEnd', colors[2]);
-        } else if (value === 33.33) {
+        } else if (value >= 27 && value < 36) {
             div.style.setProperty('--colorStart', colors[2]);
             div.style.setProperty('--colorEnd', colors[2]);
-        } else if (value > 33.33 && value < 50) {
+        } else if (value > 36 && value < 45) {
             div.style.setProperty('--colorStart', colors[2]);
             div.style.setProperty('--colorEnd', colors[3]);
-        } else if (value === 50) {
+        } else if (value >= 45 && value < 53) {
             div.style.setProperty('--colorStart', colors[3]);
             div.style.setProperty('--colorEnd', colors[3]);
-        } else if (value > 50 && value < 66.66) {
+        } else if (value > 53 && value < 62) {
             div.style.setProperty('--colorStart', colors[3]);
             div.style.setProperty('--colorEnd', colors[4]);
-        } else if (value === 66.66) {
+        } else if (value >= 62 && value < 71) {
             div.style.setProperty('--colorStart', colors[4]);
             div.style.setProperty('--colorEnd', colors[4]);
-        } else if (value > 66.66 && value < 83.33) {
+        } else if (value > 71 && value < 80) {
             div.style.setProperty('--colorStart', colors[4]);
             div.style.setProperty('--colorEnd', colors[5]);
-        } else if (value === 83.33) {
+        } else if (value >= 80 && value < 89) {
             div.style.setProperty('--colorStart', colors[5]);
             div.style.setProperty('--colorEnd', colors[5]);
-        } else if (value > 83.33 && value < 100) {
+        } else if (value > 89 && value < 100) {
             div.style.setProperty('--colorStart', colors[5]);
             div.style.setProperty('--colorEnd', colors[6]);
         } else if (value === 100) {
@@ -110,7 +110,7 @@ const MoodTracker = ({ onSave, onClose }) => {
         colorChangeAnimation(value);
         // CALCULATE THE LABEL INDEX BASED ON THE VALUE OF THE SLIDER TAKING INTO ACCOUNT THE DIFFERENCE BETWEEN SECTIONS
         // CALCULA EL INDICE DE LA ETIQUETA BASADO EN EL VALOR DEL SLIDER TENIENDO EN CUENTA LA DIFERENCIA ENTRE TRAMOS
-        const index = Math.floor(value / 16.67);
+        const index = Math.floor(value / 16);
         // UPDATE THE MOOD LABEL
         // ACTUALIZA LA ETIQUETA DEL ESTADO DE ÁNIMO
         setLabel(labels[index]);
@@ -121,7 +121,7 @@ const MoodTracker = ({ onSave, onClose }) => {
     const handleSave = () => {
         // CALCULATE THE COLOR INDEX BASED ON THE VALUE OF THE SLIDER TAKING INTO ACCOUNT THE DIFFERENCE BETWEEN SECTIONS
         // CALCULA EL INDICE DEL COLOR BASADO EN EL VALOR DEL SLIDER TENIENDO EN CUENTA LA DIFERENCIA ENTRE TRAMOS
-        const index = Math.floor(sliderValue / 16.67);
+        const index = Math.floor(sliderValue / 16);
         // OBTAIN THE CORRESPONDING COLOR
         // OBTIENE EL COLOR CORRESPONDIENTE
         const color = colors[index];
