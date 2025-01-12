@@ -1,5 +1,5 @@
 {
-  "short_name": "React App",
+  "short_name": "Prueba",
   "name": "Create React App Sample",
   "icons": [
     {
@@ -8,9 +8,9 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/Mind-Diary/favicon/favicon_192.png",
+      "src": "/Mind-Diary/ios/AppIcon@3x.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "180x180"
     },
     {
       "src": "/Mind-Diary/favicon/logo512.png",
