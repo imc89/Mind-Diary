@@ -1,14 +1,15 @@
 import React from 'react';
 // COMPONENTS
-import DiaryForm from '../../components/DiaryForm/DiaryForm'
+import DiaryForm from '../DiaryForm/DiaryForm'
+import Preview from '../Preview/Preview';
 // STYLES
 import './EntryContainer.css';
 
-const EntryContainer = ({ date, onEntrySubmit }) => {
+const EntryContainer = ({ date, onEntrySubmit, entries, deleteEntry }) => {
     return (
         <div className="entry-container">
             <DiaryForm date={date} onEntrySubmit={onEntrySubmit} />
-            <DiaryForm date={date} />
+            <Preview date={date} entries={entries} deleteEntry={deleteEntry} />
         </div>
     );
 };

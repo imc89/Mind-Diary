@@ -1,0 +1,155 @@
+/* Estilos generales para el contenedor de previsualización */
+.preview-container {
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  flex: 1;
+  max-width: 50%;
+  text-align: left;
+}
+
+.preview-container h3 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.entry-preview {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  /* Asegura que las palabras largas se rompan */
+  overflow-wrap: break-word;
+  /* Para asegurar el ajuste de texto */
+}
+
+.entry-preview h4 {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#entry-title {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.entry-preview p {
+  font-size: 16px;
+  font-family: monospace;
+  color: #666;
+  margin-bottom: 10px;
+  overflow-wrap: break-word;
+  /* Hace que el texto largo se ajuste */
+  word-wrap: break-word;
+  /* Asegura que las palabras largas se rompan */
+  white-space: pre-wrap;
+  /* Mantiene los saltos de línea y ajusta el texto */
+  max-height: 200px;
+  /* Define la altura máxima visible */
+  overflow-y: auto;
+  /* El scroll solo aparece cuando el contenido es mayor que el contenedor */
+  padding-right: 10px;
+  /* Espacio para el slider */
+}
+
+/* Personalización del scrollbar */
+.entry-preview p::-webkit-scrollbar {
+  width: 15px; /* Un poco más ancho para un look más suave */
+  height: 10px; /* Para los scroll horizontales también */
+}
+
+/* El thumb (la parte movible del scrollbar) */
+.entry-preview p::-webkit-scrollbar-thumb {
+  background-color: #5f6368; /* Color suave y oscuro */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 2px solid #f1f1f1; /* Bordes ligeros para separarlo del track */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); /* Agrega una sombra suave */
+}
+
+/* El track (la parte del fondo del scrollbar) */
+.entry-preview p::-webkit-scrollbar-track {
+  background-color: #f4f4f4; /* Color de fondo suave */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Sombra interna para darle profundidad */
+}
+
+/* Efecto de hover en el thumb */
+.entry-preview p::-webkit-scrollbar-thumb:hover {
+  background-color: #4CAF50; /* Un tono más oscuro cuando se pasa el mouse */
+}
+
+/* Efecto de hover en el track (opcional) */
+.entry-preview p::-webkit-scrollbar-track:hover {
+  background-color: #e0e0e0; /* Un tono más oscuro cuando se pasa el mouse */
+}
+
+.preview-image {
+  margin-top: 10px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.entry-color-indicator {
+  width: 100%;
+  height: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* Botón eliminar */
+.delete-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin-top: 10px;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+#delete-icon {
+  margin-right: 8px;
+  vertical-align: text-top;
+}
+
+#delete-text {
+  vertical-align: bottom;
+}
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 600px) {
+  .preview-container {
+    padding: 15px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .entry-preview {
+    padding: 10px;
+  }
+
+  .delete-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
