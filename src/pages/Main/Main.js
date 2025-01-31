@@ -136,6 +136,50 @@ const Main = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleDelete = async (id, date) => {
+        // OPEN THE DATABASE
+        // ABRE LA BASE DE DATOS
+        const db = await openDatabase();
+        // START A TRANSACTION IN 'READWRITE' MODE TO MODIFY DATA
+        // INICIA UNA TRANSACCION EN MODO 'READWRITE' PARA MODIFICAR DATOS
+        const transaction = db.transaction('entries', 'readwrite');
+        // ACCESS THE 'entries' OBJECT STORE
+        // ACCEDE AL ALMACEN DE OBJETOS 'entries'
+        const store = transaction.objectStore('entries');
+
+        // DELETE THE ENTRY WITH THE SPECIFIED ID
+        // ELIMINA LA ENTRADA CON EL ID ESPECIFICADO
+        const request = store.delete(id);
+
+        // HANDLE SUCCESSFUL DELETION
+        // MANEJA LA ELIMINACIÓN EXITOSA
+        request.onsuccess = () => {
+            // UPDATE THE STATE TO REMOVE THE DELETED ENTRY
+            // ACTUALIZA EL ESTADO PARA ELIMINAR LA ENTRADA ELIMINADA
+            setEntries((prevEntries) => {
+                // MAKE A COPY OF THE PREVIOUS ENTRIES
+                // HAZ UNA COPIA DE LAS ENTRADAS ANTERIORES
+                const updatedEntries = { ...prevEntries };
+                // REMOVE THE ENTRY WITH THE GIVEN ID FROM THE SPECIFIED DATE
+                // ELIMINA LA ENTRADA CON EL ID DADO DE LA FECHA ESPECIFICADA
+                updatedEntries[date] = Array(updatedEntries[date]).filter((entry) => entry.id !== id);
+                // RETURN THE UPDATED ENTRIES
+                // DEVUELVE LAS ENTRADAS ACTUALIZADAS
+                return updatedEntries;
+            });
+            // REFRESH THE STATE BY FETCHING ALL ENTRIES AGAIN
+            // REFRESCA EL ESTADO VOLVIENDO A OBTENER TODAS LAS ENTRADAS
+            onEntrySubmit();
+        };
+        // HANDLE ERRORS DURING DELETION
+        // MANEJA LOS ERRORES DURANTE LA ELIMINACIÓN
+        request.onerror = (event) => {
+            // LOG THE ERROR TO THE CONSOLE
+            // REGISTRA EL ERROR EN LA CONSOLA
+            console.error('ERROR AL BORRAR LA ENTRADA:', event.target.error);
+        };
+    };
+
     return (
         <div>
             <div className="header">
@@ -152,7 +196,7 @@ const Main = () => {
                 }}
                 tileDisabled={tileDisabled}
             />
-            <EntryContainer date={date} onEntrySubmit={onEntrySubmit} />
+            <EntryContainer date={date} onEntrySubmit={onEntrySubmit} entries={entries} deleteEntry={handleDelete} />
         </div>
     );
 };
