@@ -36,9 +36,9 @@ const Navbar = () => {
                     </button>
                 </div>
                 <ul className={`navbar-links ${isMenuOpen ? 'active' : ''}`} >
-                    <li className="navbar-item"><Link to="/search" onClick={closeMenu}>Búsqueda</Link></li>
-                    <li className="navbar-item"><Link to="/image" onClick={closeMenu}>Imágenes</Link></li>
-                    <li className="navbar-item"><Link to="/graph" onClick={closeMenu}>Gráficos</Link></li>
+                  <Link to="/search" onClick={closeMenu}> <li className="navbar-item">Búsqueda</li> </Link>
+                  <Link to="/image" onClick={closeMenu}> <li className="navbar-item">Imágenes</li> </Link>
+                  <Link to="/graph" onClick={closeMenu}> <li className="navbar-item">Gráficos</li> </Link>
                     <li className='navbar-item desktop-only'><FaExchangeAlt/></li>
                 </ul>
             </div>
