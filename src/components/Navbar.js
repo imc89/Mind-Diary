@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaExchangeAlt } from "react-icons/fa";
+
 import './Navbar.css';
 
 const Navbar = () => {
@@ -23,15 +25,21 @@ const Navbar = () => {
                         Mind Diary
                     </h1>
                 </Link>
-                <button className="navbar-toggle" onClick={toggleMenu}>
-                    <span className="navbar-icon"></span>
-                    <span className="navbar-icon"></span>
-                    <span className="navbar-icon"></span>
-                </button>
+                <div className='mobile-menu'>
+                    <button className="navbar-toggle" onClick={toggleMenu}>
+                        <span className="navbar-icon"></span>
+                        <span className="navbar-icon"></span>
+                        <span className="navbar-icon"></span>
+                    </button>
+                    <button className="navbar-toggle">
+                    <span><FaExchangeAlt/></span>
+                    </button>
+                </div>
                 <ul className={`navbar-links ${isMenuOpen ? 'active' : ''}`} >
                     <li className="navbar-item"><Link to="/search" onClick={closeMenu}>Búsqueda</Link></li>
                     <li className="navbar-item"><Link to="/image" onClick={closeMenu}>Imágenes</Link></li>
                     <li className="navbar-item"><Link to="/graph" onClick={closeMenu}>Gráficos</Link></li>
+                    <li className='navbar-item desktop-only'><FaExchangeAlt/></li>
                 </ul>
             </div>
         </nav>
