@@ -91,12 +91,19 @@
 
 .mood-container {
   display: flex;
+  flex-direction: column;
   /* Hace que los elementos hijos se alineen en línea */
   gap: 10px;
   /* Espaciado entre el botón y el recuadro */
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   /* Alinea verticalmente el contenido en el centro */
+}
+
+.mood-edit {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .mood-button {

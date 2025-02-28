@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import './Preview.css';
+
 import { userLocale } from '../../utils/utilsValues';
 
 const Preview = ({ date, entries, deleteEntry }) => {

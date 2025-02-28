@@ -6,7 +6,7 @@ import Search from './pages/SearchText/SearchText';
 import Images from './pages/SearchImages/SearchImages';
 import Graph from './pages/Graph/Graph';
 // COMPONENTS
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import SplashScreen from './components/SplashScreen/SplashScreen';
 
 function App() {

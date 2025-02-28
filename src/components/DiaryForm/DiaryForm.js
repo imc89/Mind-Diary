@@ -8,6 +8,7 @@ import { FaFaceSmile, FaFaceAngry, FaFaceFlushed, FaFaceFrown, FaFaceFrownOpen, 
 // COMPONENTS
 import MoodTracker from '../MoodTracker/MoodTracker'
 
+import vader from 'vader-sentiment';
 import './DiaryForm.css';
 
 const DiaryForm = ({ date, onEntrySubmit }) => {
@@ -24,6 +25,10 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
     // STATE TO CHANGE THE MOOD BUTTON ICON
     // ESTADO PARA CAMBIAR EL ICONO DEL BOTON MOOD
     const [faceIcon, setFaceIcon] = useState('FaFaceSmile');
+    //
+    //
+    const [trackerPriority, setTrackerPriority] = useState(false);
+    const [typingTimeout, setTypingTimeout] = useState(null);
     // ICONS TO CHANGE WHEN THE CURSOR PASSES OVER THE MOOD BUTTON
     // ICONOS A CAMBIAR CUANDO EL CURSOR PASA POR ENCIMA DEL BOTON DE MOOD
     const faces = ['FaFaceSmile', 'FaFaceAngry', 'FaFaceFlushed', 'FaFaceFrown', 'FaFaceFrownOpen', 'FaFaceGrin', 'FaFaceGrinBeamSweat', 'FaFaceGrinHearts', 'FaFaceMeh', 'FaFaceSadTear'];
@@ -39,90 +44,85 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
     // THE EMPTY DEPENDENCE [] ENSURES THAT USEEFFECT IS ONLY EXECUTED ONCE WHEN SETTING UP THE COMPONENT
     // LA DEPENDENCIA VACÍA [] ASEGURA QUE USEEFFECT SOLO SE EJECUTE UNA VEZ AL MONTAR EL COMPONENTE
 
-    const handleSubmit = (e) => {
-        // WE PREVENT THE DEFAULT BEHAVIOR OF THE FORM
-        // PREVENIMOS EL COMPORTAMIENTO POR DEFECTO DEL FORMULARIO
+
+    const handleInputChange = (e) => {
+        setEntry(e.target.value);
+
+        if (typingTimeout) clearTimeout(typingTimeout);
+
+        if (!e.target.value.trim()) {
+            setMoodLabel('');
+            setMoodColor('');
+            console.log("entraaa")
+            return;
+        }
+
+        setTypingTimeout(setTimeout(() => {
+            if (e.target.value.trim()) {
+                translation(e.target.value);
+            }
+        }, 800));
+    };
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newEntry = {
-            // WE CONVERT THE DATE TO A toLocaleDateString DATE FORMAT.
-            // CONVERTIMOS LA FECHA A UNA toLocaleDateString
-            date: date.toLocaleDateString(userLocale),
-            entry, // ENTRY TEXT // TEXTO DE LA ENTRADA
-            moodLabel, // MOOD LABEL
-            moodColor,  // MOOD COLOR
-            image // IMAGE URL // URL DE LA IMAGEN
-        };
+        try {
+            let mood = '';
+            if (!trackerPriority) {
+                mood = await translation(entry); // Esperamos el resultado de la traducción
+            } else {
+                mood = { 'label': moodLabel, 'color': moodColor }
+            }
 
-        // WE OPEN THE "diaryDB" DATABASE WITH VERSION 1
-        // ABRIMOS LA BASE DE DATOS "diaryDB" CON VERSIÓN 1
-        const request = window.indexedDB.open('diaryDB', 1);
-
-        // WE HANDLE THE ERROR WHEN OPENING THE MODAL DATABASE IF NECESSARY
-        // MANEJAMOS EL ERROR AL ABRIR LA BASE DE DATOS MODAL SI ES NECESARIO
-        request.onerror = (event) => {
-            console.error('Error al abrir la base de datos:', event.target.errorCode);
-        };
-
-        // WE HANDLE SUCCESS WHEN OPENING THE DATABASE
-        // MANEJAMOS EL ÉXITO AL ABRIR LA BASE DE DATOS
-        request.onsuccess = (event) => {
-            // WE GET THE DATABASE INSTANCE
-            // OBTENEMOS LA INSTANCIA DE LA BASE DE DATOS
-            const db = event.target.result;
-            // WE START A TRANSACTION IN READING AND WRITING MODE
-            // INICIAMOS UNA TRANSACCIÓN EN MODO DE LECTURA Y ESCRITURA
-            const transaction = db.transaction(['entries'], 'readwrite');
-            // WE GET THE DATABASE OF 'ENTRIES' OBJECTS
-            // OBTENEMOS EL ALMACÉN DE OBJETOS 'ENTRIES'
-            const objectStore = transaction.objectStore('entries');
-            // WE ADD THE NEW ENTRANCE TO THE OBJECT DADATABASE
-            // AGREGAMOS LA NUEVA ENTRADA AL ALMACÉN DE OBJETOS
-            const addRequest = objectStore.add(newEntry);
-
-            // WE HANDLE SUCCESS BY SAVING THE ENTRANCE
-            // MANEJAMOS EL ÉXITO AL GUARDAR LA ENTRADA
-            addRequest.onsuccess = () => {
-                console.log('Entrada guardada correctamente.');
-                // WE CLEAN THE STATUS OF THE TEXT INPUT
-                // LIMPIAMOS EL ESTADO DE LA ENTRADA DE TEXTO
-                setEntry('');
-                // WE CLEAN THE STATUS OF THE MOOD 
-                // LIMPIAMOS EL ESTADO DEL MOOD 
-                setMoodLabel('');
-                // WE CLEAN THE STATUS OF THE COLOR MOOD 
-                // LIMPIAMOS EL ESTADO DEL COLOR DEL MOOD 
-                setMoodColor('');
-                // WE CLEAN THE STATUS OF THE IMAGE
-                // LIMPIAMOS EL ESTADO DE LA IMAGEN
-                setImage(null);
-                // WE CALL THE ENTRY UPDATE FUNCTION IN THE PARENT
-                // LLAMAMOS A LA FUNCIÓN DE ACTUALIZACIÓN DE ENTRADAS EN EL PADRE
-                onEntrySubmit(newEntry);
+            const newEntry = {
+                date: date.toLocaleDateString(userLocale),
+                entry,
+                moodLabel: mood.label, // Guardamos el mood de la traducción
+                moodColor: mood.color,  // Guardamos el color del mood
+                image
             };
 
-            // WE HANDLE THE ERROR BY SAVING THE ENTRANCE
-            // MANEJAMOS EL ERROR AL GUARDAR LA ENTRADA
-            addRequest.onerror = (event) => {
-                console.error('Error al guardar la entrada:', event.target.errorCode);
-            };
-            // WE CLOSE THE DATABASE INSTANCE ONCE THE TRANSACTION IS COMPLETED
-            // CERRAMOS LA INSTANCIA DE LA BASE DE DATOS UNA VEZ QUE LA TRANSACCIÓN SE COMPLETA
-            transaction.oncomplete = () => db.close();
-        };
+            const request = window.indexedDB.open('diaryDB', 1);
 
-        // CONTINGENCY METHOD TO CREATE THE BBDD 'ENTRIES' IN CASE IT IS DELETED BY HAND AT THE INIT OF THE APPLICATION
-        // METODO DE CONTINGENCIA PARA CREAR LA BBDD 'ENTRIES' EN CASO DE QUE SE BORRE A MANO AL INICIAR LA APLICACION
-        request.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            // WE CREATE THE WAREHOUSE OF 'ENTRIES' OBJECTS
-            // CREAMOS EL ALMACÉN DE OBJETOS 'ENTRIES'
-            const objectStore = db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true });
-            // WE CREATE AN INDEX IN THE 'DATE' FIELD
-            // CREAMOS UN ÍNDICE EN EL CAMPO 'DATE'
-            objectStore.createIndex('date', 'date', { unique: false });
-        };
+            request.onerror = (event) => {
+                console.error('Error al abrir la base de datos:', event.target.errorCode);
+            };
+
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(['entries'], 'readwrite');
+                const objectStore = transaction.objectStore('entries');
+                const addRequest = objectStore.add(newEntry);
+
+                addRequest.onsuccess = () => {
+                    console.log('Entrada guardada correctamente.');
+                    setEntry('');
+                    setMoodLabel('');
+                    setMoodColor('');
+                    setImage(null);
+                    setTrackerPriority(false);
+                    onEntrySubmit(newEntry);
+                };
+
+                addRequest.onerror = (event) => {
+                    console.error('Error al guardar la entrada:', event.target.errorCode);
+                };
+
+                transaction.oncomplete = () => db.close();
+            };
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                const objectStore = db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true });
+                objectStore.createIndex('date', 'date', { unique: false });
+            };
+        } catch (error) {
+            console.error("Error en la traducción antes de guardar:", error);
+        }
     };
+
 
     const handleFileChange = (e) => {
         // WE VERIFY IF THERE IS A SELECTED FILE
@@ -148,19 +148,21 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
 
     const handleSaveMood = (mood) => {
         console.log('Mood saved:', mood);
-         // Guardamos el label del mood
-        setMoodLabel(mood.label);  
+        // Guardamos el label del mood
+        setMoodLabel(mood.label);
         // Guardamos el color del mood
-        setMoodColor(mood.color);   
-         // Cerrar la modal
-        handleCloseModal() 
+        setMoodColor(mood.color);
+        //
+        setTrackerPriority(true)
+        // Cerrar la modal
+        handleCloseModal()
     };
 
     // METODO DE CIERRE DE LA MODAL
     const handleCloseModal = () => {
         setModalOpen(false);
     };
-    
+
     // METODO PARA CAMBIAR EL ICONO DE LA CARA EN EL BOTON DE ABRIR MODAL MOOD
     const handleMouseEnter = () => {
         const randomIndex = Math.floor(Math.random() * faces.length);
@@ -184,21 +186,85 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         return <IconComponent />;
     };
 
+    // Función para mapear la puntuación del sentimiento a un estado de ánimo
+    const getMoodFromScore = (score) => {
+        if (score <= -3) return { label: 'MUY MAL', color: '#8A2BE2' };   // Rojo oscuro
+        if (score === -2) return { label: 'MAL', color: '#1E90FF' };     // Rojo anaranjado
+        if (score === -1) return { label: 'ALGO MAL', color: '#4682B4' }; // Naranja
+        if (score === 0) return { label: 'NORMAL', color: '#00BFFF' };   // Amarillo
+        if (score === 1) return { label: 'ALGO BIEN', color: '#32CD32' }; // Verde amarillento
+        if (score === 2) return { label: 'BIEN', color: '#FFD700' };     // Verde lima
+        return { label: 'MUY BIEN', color: '#FF8C00' };                  // Verde oscuro
+    };
+
+    // Función para analizar el sentimiento usando VADER
+    const analyzeSentimentWithVader = (text) => {
+        const analysis = vader.SentimentIntensityAnalyzer.polarity_scores(text);
+        const compoundScore = analysis.compound;
+
+        let sentimentScore = 0;
+        if (compoundScore <= -0.5) sentimentScore = -3;
+        else if (compoundScore <= -0.2) sentimentScore = -2;
+        else if (compoundScore < 0) sentimentScore = -1;
+        else if (compoundScore === 0) sentimentScore = 0;
+        else if (compoundScore <= 0.2) sentimentScore = 1;
+        else if (compoundScore <= 0.5) sentimentScore = 2;
+        else sentimentScore = 3;
+
+        return getMoodFromScore(sentimentScore);
+    };
+
+
+    const translation = (entry) => {
+        return new Promise((resolve, reject) => {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(entry)}`;
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((json) => {
+                    const translateResult = json[0].map((item) => item[0]).join("");
+                    console.log("Texto original:", entry);
+                    console.log("Traducción:", translateResult);
+
+                    const mood = analyzeSentimentWithVader(translateResult);
+                    console.log("SENTIMIENTO:", mood.label);
+
+                    setMoodLabel(mood.label);
+                    setMoodColor(mood.color);
+
+                    resolve(mood); // Devolvemos el mood obtenido
+                })
+                .catch((error) => {
+                    console.log("Error en la traducción:", error);
+                    reject(error);
+                });
+        });
+    };
+
+
+
 
     return (
         <div className="diary-form">
             <div className="header">
-                <h2>Entrada para: {new Date(date).toLocaleDateString()}</h2>
+                <h2>Entrada para: {new Date(date).toLocaleDateString(userLocale)}</h2>
             </div>
             <div className="mood-container">
-                <button
-                    className="mood-button"
-                    onClick={handleOpenModal}
-                    onMouseEnter={handleMouseEnter}
-                >
-                    {renderIcon(faceIcon)}
-                </button>
-                <div className="mood-box" style={{ backgroundColor: moodColor }}></div>
+                <div className='mood-edit'>
+                    <b>Editar estado de ánimo asignado: </b>
+                    <button
+                        className="mood-button"
+                        onClick={handleOpenModal}
+                        onMouseEnter={handleMouseEnter}
+                    >
+                        {renderIcon(faceIcon)}
+                    </button>
+                </div>
+
+                <div
+                    className="entry-color-indicator"
+                    style={{ backgroundColor: moodColor || "#00BFFF" }}
+                ></div>
             </div>
             <p className='mood-value'>{moodLabel}</p>  {/* Usar moodLabel en lugar de data.label */}
 
@@ -206,9 +272,15 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
 
             <textarea
                 value={entry}
-                onChange={(e) => setEntry(e.target.value)}
+                onChange={(e) => {
+                    setEntry(e.target.value);
+                    handleInputChange(e);
+                }}
                 placeholder="Escribe tu entrada aquí..."
+            // onBlur={() => translation(entry)}
             ></textarea>
+
+
             <div className="file-upload">
                 <input
                     type="file"

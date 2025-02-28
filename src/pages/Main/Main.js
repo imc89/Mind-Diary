@@ -4,7 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 // COMPONENTES
 import Calendar from 'react-calendar';
 import EntryContainer from '../../components/EntryContainer/EntryContainer';
+
 // VARIABLES
+// ESTILOS
 import { userLocale } from '../../utils/utilsValues';
 
 // STYLES
@@ -18,6 +20,10 @@ const Main = () => {
     // STATE FOR STORING DIARY ENTRIES
     // ESTADO PARA ALMACENAR LAS ENTRADAS DEL DIARIO
     const [entries, setEntries] = useState({});
+    // STATE FOR THE ACTIVE START DATE IN THE CALENDAR
+    // ESTADO PARA LA FECHA DE INICIO ACTIVA EN EL CALENDARIO
+    const [activeStartDate, setActiveStartDate] = useState(new Date());
+
     // FUNCTION TO OPEN THE DATABASE
     // FUNCIÓN PARA ABRIR LA BASE DE DATOS
     const openDatabase = () => {
@@ -41,7 +47,6 @@ const Main = () => {
                 resolve(event.target.result);
                 // IF THE REQUEST IS SUCCESSFUL, RESOLVE THE PROMISE WITH THE RESULT
                 // SI LA SOLICITUD ES EXITOSA, RESUELVE LA PROMESA CON EL RESULTADO
-
             };
 
             request.onerror = (event) => {
@@ -84,8 +89,8 @@ const Main = () => {
         const db = await openDatabase();
         const allEntries = await fetchAllEntries(db);
 
-        const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-        const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        const startOfMonth = new Date(activeStartDate.getFullYear(), activeStartDate.getMonth(), 1);
+        const endOfMonth = new Date(activeStartDate.getFullYear(), activeStartDate.getMonth() + 1, 0);
 
         const daysInMonth = [];
         // LOOP THROUGH THE DAYS OF THE MONTH TO GENERATE THE LIST OF DATES
@@ -110,7 +115,7 @@ const Main = () => {
         setEntries(entriesByDay);
         // 'ONENTRYSUBMIT' ONLY CHANGES WHEN 'DATE' CHANGES
         // ONENTRYSUBMIT SOLO CAMBIA CUANDO 'DATE' CAMBIA
-    }, [date]);
+    }, [activeStartDate]);
 
     // FUNCTION TO CHANGE THE SELECTED DATE IN THE CALENDAR
     // CAMBIAR LA FECHA SELECCIONADA EN EL CALENDARIO
@@ -128,13 +133,19 @@ const Main = () => {
         // DESHABILITA LAS FECHAS FUTURAS EN EL CALENDARIO
     };
 
-    useEffect(() => {
-        // CALL onEntrySubmit WHEN THE COMPONENT MOUNTS 
-        // LLAMA A onEntrySubmit CUANDO EL COMPONENTE SE MONTA 
-        onEntrySubmit();
+    // FUNCTION TO DETECT MONTH/YEAR NAVIGATION CHANGES
+    // FUNCIÓN PARA DETECTAR LOS CAMBIOS DE NAVEGACION DE MES/AÑO
+    const handleActiveStartDateChange = ({ activeStartDate }) => {
+        setActiveStartDate(activeStartDate);
+        // UPDATE THE STATE WHEN THE MONTH OR YEAR IS CHANGED
+        // ACTUALIZA EL ESTADO CUANDO SE CAMBIA EL MES O AÑO
+    };
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    useEffect(() => {
+        // CALL onEntrySubmit WHEN THE COMPONENT MOUNTS OR THE ACTIVE START DATE CHANGES
+        // LLAMA A onEntrySubmit CUANDO EL COMPONENTE SE MONTA O CUANDO CAMBIA LA FECHA INICIAL ACTIVA
+        onEntrySubmit();
+    }, [activeStartDate]);
 
     const handleDelete = async (id, date) => {
         // OPEN THE DATABASE
@@ -180,21 +191,33 @@ const Main = () => {
         };
     };
 
+    const handleCurrentDate = () => {
+        const today = new Date();
+        setDate(today);
+        setActiveStartDate(today); // Esto actualizará la vista del calendario al mes actual
+    };
+
     return (
         <div>
             <div className="header">
                 <h1>Mind Diary</h1>
             </div>
+
+            <div className="current-date-container">
+                <button className="current-date" onClick={handleCurrentDate}>FECHA ACTUAL</button>
+            </div>
+
             <Calendar
                 onChange={onDateChange}
                 value={date}
                 showNeighboringMonth={false}
+                onActiveStartDateChange={handleActiveStartDateChange}
                 tileClassName={({ date }) => {
                     const dateString = date.toLocaleDateString(userLocale);
                     return entries[dateString] || '';
-                    // aqui entries es un array de objetos cada objeto es una fecha del mes con el valor si tiene has-entry o no
                 }}
                 tileDisabled={tileDisabled}
+                activeStartDate={activeStartDate} // Asegura que el calendario refleje el mes correcto
             />
             <EntryContainer date={date} onEntrySubmit={onEntrySubmit} entries={entries} deleteEntry={handleDelete} />
         </div>
