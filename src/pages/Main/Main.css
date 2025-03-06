@@ -4,12 +4,48 @@
     font-family: "Nanum Pen Script";
     font-size: 120px;
     text-align: center;
-    margin: 25px;
+    margin: 80px 0 0 0;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.app-title-img {
+    margin: 80px 0 0 0;
+    max-width: 100%;
+    /* Asegura que la imagen nunca sea más grande que su contenedor */
+    height: auto;
+    /* Mantiene la proporción de la imagen */
+    width: 600px;
+    /* Establece el tamaño de la imagen en pantallas grandes */
 }
 
 /* NAVIGATION AND CALENDAR CONTAINER */
 /* CONTENEDOR DE NAVEGACION Y CALENDARIO */
 .react-calendar {}
+
+.current-date-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* CURRENT DATE BUTTON */
+/* BOTON DE FECHA ACTUAL */
+.current-date {
+    display: inline-block;
+    border: none;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
 .react-calendar button {
     background-color: #4CAF50;
@@ -105,7 +141,11 @@
         font-family: "Nanum Pen Script";
         font-size: 70px;
         text-align: center;
-        margin: 25px;
+        margin: 80px 0 0 0;
+    }
+
+    .app-title-img {
+        width: 350px;
     }
 
     .react-calendar__navigation {

@@ -1,0 +1,131 @@
+.search-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Alinea todo desde arriba */
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.title-search-text {
+    margin-top: 55px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    padding: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: sticky;
+    top: 20px;
+    /* Fija el input al tope de la pantalla */
+    z-index: 10;
+    /* Asegura que el input quede encima */
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+    border-radius: 50px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 18px;
+}
+
+.search-button:hover {
+    color: #333;
+}
+
+.entries-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    overflow-y: auto;
+    /* Solo desplazamiento vertical */
+    max-height: calc(100vh - 150px);
+    /* Ajusta la altura disponible */
+    margin-top: 20px;
+    padding-right: 10px;
+    /* Evita desbordes laterales */
+    box-sizing: border-box;
+    /* Asegura que el padding no afecte el tamaño */
+}
+
+.entry-card {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%;
+    /* Se asegura de que la tarjeta ocupe el 100% del contenedor */
+    max-width: 400px;
+    /* Limita el ancho máximo */
+    text-align: left;
+    box-sizing: border-box;
+    /* Para evitar que el padding cause desbordamiento */
+    word-wrap: break-word;
+    /* Evita que el texto largo se desborde */
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    color: #ff0000;
+    cursor: pointer;
+}
+
+.no-results {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #777;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.no-found-search {
+    text-align: center;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 480px) {
+    .search-bar {
+        max-width: 90%;
+        padding: 8px;
+    }
+
+    .search-input {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .search-button {
+        font-size: 16px;
+        padding: 8px;
+    }
+}

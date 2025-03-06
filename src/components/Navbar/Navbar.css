@@ -1,0 +1,325 @@
+/* NAVBAR STYLES */
+.navbar {
+    position: fixed;
+    background: #1976d2;
+    /* Color de fondo azul similar al de Material-UI */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 58px;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* Sombra más suave */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.home-container {
+    display: flex;
+}
+
+.navbar-logoimg {
+    height: 55px;
+    margin-left: 15px;
+}
+
+/* .navbar-logo {
+    color: white;
+    font-family: "Nanum Pen Script";
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 12px;
+} */
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0 0 5px 0;
+    padding: 0;
+    align-items: center;
+    /* Asegura que los enlaces estén centrados verticalmente */
+}
+
+
+.navbar-home {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-item {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    /* Transiciones suaves */
+    cursor: pointer;
+
+}
+
+/* Efecto hover con escala */
+.navbar-item:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+    color: white;
+    transform: scale(1.05);
+    /* Hace que el botón crezca un poco */
+}
+
+/* Efecto active con color más oscuro */
+.navbar-item:active {
+    background-color: rgba(0, 0, 0, 0.2);
+    transform: scale(0.95);
+    /* Efecto de reducción */
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* BUTTON TO TOGGLE MENU IN MOBILE VIEW */
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background: transparent;
+    border: none;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+}
+
+.navbar-icon {
+    width: 25px;
+    height: 4px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.desktop-only {
+    display: block;
+}
+
+/* MENÚ TRANSFER */
+.transfer {
+    list-style: none;
+    margin: 0;
+    position: absolute;
+    top: 58px;
+    right: 0px;
+    width: 75px;
+    height: 148px;
+    background: #1976d2;
+    color: white;
+    border-radius: 0 0 0 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    padding: 0;
+    padding-bottom: 5px;
+    display: none;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Mostrar el menú cuando está activo */
+.transfer.active {
+    display: flex;
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transfer-icon {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+.export {
+    border-bottom: solid white;
+}
+
+.import {
+    border-bottom: solid white;
+}
+
+/* Ajusta el texto para que esté pegado abajo del icono */
+.export-tag {
+    font-size: 10px;
+    position: absolute;
+    top: 24%;
+    left: 15%;
+}
+
+.import-tag {
+    font-size: 10px;
+    position: absolute;
+    top: 56%;
+    left: 15%;
+}
+
+.delete-tag {
+    font-size: 10px;
+    position: absolute;
+    top: 91%;
+    left: 21%;
+}
+
+.transfer li:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+}
+
+.modal:hover {
+    border: 2px dashed #4CAF50;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+}
+
+.modal p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 165px;
+}
+
+.modal-accept,
+.modal-cancel {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal-accept {
+    background: red;
+    color: white;
+}
+
+.modal-cancel {
+    background: grey;
+    color: white;
+}
+
+
+.modal.drag-over {
+    border: 2px dashed #007bff;
+    /* background-color: rgba(0, 123, 255, 0.1); */
+}
+
+/* RESPONSIVE STYLES */
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        position: absolute;
+        border-top: solid white;
+        top: 57px;
+        /* Just below the navbar */
+        left: 0;
+        margin-bottom: 0;
+        background-color: #1976d2;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .navbar-item {
+        font-size: 18px;
+        width: 70%;
+        border: solid white;
+        text-align: center;
+        padding: 12px 30px;
+        margin: 5px 0;
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-menu {
+        display: flex;
+        justify-content: flex-end;
+        width: 25%;
+    }
+
+    .navbar-toggle {
+        display: flex;
+        margin: 10px;
+        color: white;
+        font-size: 20px;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal p {
+        font-size: 14px;
+    }
+}

@@ -1,1 +1,114 @@
 
+.graph-menu-display {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    /* No permitir que los elementos se ajusten a varias filas */
+}
+
+.graph-container {
+    padding: 20px;
+    margin-top: 55px !important;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.graph-date {
+    text-transform: uppercase;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    min-width: 150px;
+    text-align: center;
+}
+
+.graph-menu-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.graph-menu-button:hover {
+    background-color: #45a049;
+}
+
+/* Fila 1 (Mes Actual) */
+.graph-menu-display-first {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Fila 2 (Mes Anterior, Graph Date, Mes Siguiente) */
+.graph-menu-display-second {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Fila 3 (Año Anterior, Año Siguiente) */
+.graph-menu-display-third {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+@media (max-width: 768px) {
+
+    canvas {
+        width: 165% !important; /* Asegura que el canvas ocupe todo el espacio horizontal disponible */
+        height: 100% !important; /* Asegura que el canvas ocupe todo el espacio vertical disponible */
+    }
+
+    
+    .graph-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden; /* Deshabilita el desplazamiento vertical */
+        /* height: calc(100vh - 180px); /* Ocupa todo el alto disponible menos los márgenes de otros elemento */
+        /* Permitir desplazamiento horizontal */
+    }
+
+    .graph-content {
+        width: 150%;
+        /* Aumentar el ancho para que el gráfico ocupe más espacio */
+    }
+
+    .graph-container {
+        padding: 10px;
+        margin-top: 55px;
+        max-width: 100%;
+    }
+
+    .graph-menu-button {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+
+    .graph-menu-display {
+        gap: 10px;
+    }
+
+    .graph-wrapper {
+        overflow-x: auto;
+        /* Permitir desplazamiento horizontal */
+    }
+
+    .graph-date {
+    padding: 0;
+    }
+}

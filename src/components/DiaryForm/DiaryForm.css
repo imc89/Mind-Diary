@@ -89,14 +89,79 @@
   margin-bottom: 20px;
 }
 
+/*  modal*/
+.ai-modal {
+  position: fixed;
+  /* La modal se posicionará por encima del contenido */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Fondo semitransparente */
+  z-index: 1000;
+  /* Asegura que la modal esté encima de otros elementos */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ai-analyzer-spinner {
+  width: 350px;
+}
+
+.ai-modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Centra el contenido verticalmente */
+  align-items: center;
+  /* Centra el contenido horizontalmente */
+  width: 650px;
+  max-height: 80vh;
+  /* Establece una altura máxima relativa al viewport */
+  overflow-y: auto;
+  /* Permite el desplazamiento vertical */
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.ai-answer-content {
+  max-height: 100%; /* Asegura que el contenido no se desborde */
+  overflow-y: auto; /* Desplazamiento vertical */
+  padding: 10px;
+  box-sizing: border-box; /* Asegura que el padding no afecte al tamaño del contenedor */
+}
+
+.ai-modal-content button {
+  margin-top: 20px;
+  /* Añadir un pequeño margen si es necesario */
+}
+
+.ai-modal button {
+  margin-top: 10px;
+}
+
+/*  */
 .mood-container {
   display: flex;
+  flex-direction: column;
   /* Hace que los elementos hijos se alineen en línea */
   gap: 10px;
   /* Espaciado entre el botón y el recuadro */
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   /* Alinea verticalmente el contenido en el centro */
+}
+
+.mood-edit {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .mood-button {
@@ -132,6 +197,22 @@
   text-align: center;
   margin: 10px auto;
   font-weight: bold;
+}
+
+.ai-analyzer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.ai-analyzer-text {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.ai-analyzer-img {
+  width: 55px;
+  cursor: pointer;
 }
 
 /* Media Queries para dispositivos móviles */
