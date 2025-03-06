@@ -23,9 +23,7 @@ const SplashScreen = ({ onFinish }) => {
 
   return (
     <div className="splash-screen">
-      {/* <img src={`${process.env.PUBLIC_URL}/favicon/favicon-512.png`} alt="Logo" className="splash-logo" /> */}
       <img src={`${process.env.PUBLIC_URL}/icon.png`} alt="Logo" className="splash-logo" />
-
       <span>Mind Diary</span>
     </div>
   );

@@ -7,6 +7,22 @@
     margin: 80px 0 0 0;
 }
 
+.header {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.app-title-img {
+    margin: 80px 0 0 0;
+    max-width: 100%;
+    /* Asegura que la imagen nunca sea más grande que su contenedor */
+    height: auto;
+    /* Mantiene la proporción de la imagen */
+    width: 600px;
+    /* Establece el tamaño de la imagen en pantallas grandes */
+}
+
 /* NAVIGATION AND CALENDAR CONTAINER */
 /* CONTENEDOR DE NAVEGACION Y CALENDARIO */
 .react-calendar {}
@@ -126,6 +142,10 @@
         font-size: 70px;
         text-align: center;
         margin: 80px 0 0 0;
+    }
+
+    .app-title-img {
+        width: 350px;
     }
 
     .react-calendar__navigation {

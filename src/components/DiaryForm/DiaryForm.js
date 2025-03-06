@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
+
 // OBTAIN THE REGIONAL CONFIGURATION OF THE USER FROM utilsValues
 // OBTENER LA CONFIGURACIÓN REGIONAL DEL USUARIO DEL utilsValues
 import { userLocale } from '../../utils/utilsValues';
+
 // ICONS 
 import { FaFileUpload } from 'react-icons/fa';
 import { FaFaceSmile, FaFaceAngry, FaFaceFlushed, FaFaceFrown, FaFaceFrownOpen, FaFaceGrin, FaFaceGrinBeamSweat, FaFaceGrinHearts, FaFaceMeh, FaFaceSadTear } from "react-icons/fa6";
+
 // COMPONENTS
 import MoodTracker from '../MoodTracker/MoodTracker'
 
+// IMPORTING AXIOS FOR MAKING HTTP REQUESTS
+// IMPORTANDO AXIOS PARA REALIZAR PETICIONES HTTP
+import axios from 'axios';
+
+// IMPORTING VADER SENTIMENT ANALYZER FOR TEXT SENTIMENT ANALYSIS
+// IMPORTANDO VADER SENTIMENT ANALYZER PARA EL ANÁLISIS DE SENTIMIENTOS DEL TEXTO
 import vader from 'vader-sentiment';
+
+//STYLES
 import './DiaryForm.css';
+
 
 const DiaryForm = ({ date, onEntrySubmit }) => {
     // STATE FOR THE ENTRY TEXT
@@ -25,10 +37,21 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
     // STATE TO CHANGE THE MOOD BUTTON ICON
     // ESTADO PARA CAMBIAR EL ICONO DEL BOTON MOOD
     const [faceIcon, setFaceIcon] = useState('FaFaceSmile');
-    //
+    //MODALS
+    const [modalOpen, setModalOpen] = useState(false);
+    const [aiModalOpen, setAiModalOpen] = useState(false);
+    // GEMINI AI ICON
+    const [aiIconSrc, setAiIconSrc] = useState(`${process.env.PUBLIC_URL}/icon/AI/ai-white.png`);
+    // GEMINI AI SPINNER WAITING
+    const [showAiSpinner, setShowAiSpinner] = useState(true);  // Nuevo estado para controlar la imagen
+
+    // GEMINI AI ANSWER
+    const [aiAnswer, setAiAnswer] = useState('');
+
     //
     const [trackerPriority, setTrackerPriority] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState(null);
+    
     // ICONS TO CHANGE WHEN THE CURSOR PASSES OVER THE MOOD BUTTON
     // ICONOS A CAMBIAR CUANDO EL CURSOR PASA POR ENCIMA DEL BOTON DE MOOD
     const faces = ['FaFaceSmile', 'FaFaceAngry', 'FaFaceFlushed', 'FaFaceFrown', 'FaFaceFrownOpen', 'FaFaceGrin', 'FaFaceGrinBeamSweat', 'FaFaceGrinHearts', 'FaFaceMeh', 'FaFaceSadTear'];
@@ -139,13 +162,38 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         }
     };
 
-    // MOOD
-    const [modalOpen, setModalOpen] = useState(false);
+    // MODALS
 
     const handleOpenModal = () => {
         setModalOpen(true);
     };
 
+    // METODO DE CIERRE DE LA MODAL
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
+    // Función para abrir la modal AI
+    const openAiModal = () => {
+        setAiAnswer('');  // Limpiar la respuesta de la IA antes de mostrar la imagen
+        setShowAiSpinner(true);  // Mostrar la imagen AI
+        askGemini();  // Llamar al método para obtener la respuesta de la IA
+
+        // Después de 5 segundos, mostramos la respuesta de la IA
+        setTimeout(() => {
+            setShowAiSpinner(false);  // Dejar de mostrar la imagen y mostrar la respuesta
+        }, 5000);
+
+        setAiModalOpen(true);  // Abrir la modal
+    };
+
+    // Función para cerrar la modal AI
+    const closeAiModal = () => {
+        setAiModalOpen(false);
+    };
+
+
+    // MOOD
     const handleSaveMood = (mood) => {
         console.log('Mood saved:', mood);
         // Guardamos el label del mood
@@ -158,18 +206,16 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         handleCloseModal()
     };
 
-    // METODO DE CIERRE DE LA MODAL
-    const handleCloseModal = () => {
-        setModalOpen(false);
-    };
 
-    // METODO PARA CAMBIAR EL ICONO DE LA CARA EN EL BOTON DE ABRIR MODAL MOOD
+    // METHOD THAT RETURNS ONE OF THE ICONS FROM faces RANDOMLY
+    // MÉTODO QUE DEVUELVE UNO DE LOS ICONOS DE faces ALEATORIAMENTE
     const handleMouseEnter = () => {
         const randomIndex = Math.floor(Math.random() * faces.length);
         setFaceIcon(faces[randomIndex]);
     };
 
-    // Crear el ícono dinámicamente
+    // METHOD THAT PAINTS THE ICON GENERATED RANDOMLY BY handleMouseEnter
+    // MÉTODO QUE PINTA EL ICONO GENERADO ALEATORIAMENTE POR handleMouseEnter
     const renderIcon = (iconName) => {
         const IconComponent = {
             FaFaceSmile: FaFaceSmile,
@@ -186,7 +232,8 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         return <IconComponent />;
     };
 
-    // Función para mapear la puntuación del sentimiento a un estado de ánimo
+    // FUNCTION TO MAP THE SCORE OF FEELING TO A MOOD
+    // FUNCIÓN PARA MAPEAR LA PUNTUACIÓN DEL SENTIMIENTO A UN ESTADO DE ÁNIMO
     const getMoodFromScore = (score) => {
         if (score <= -3) return { label: 'MUY MAL', color: '#8A2BE2' };   // Rojo oscuro
         if (score === -2) return { label: 'MAL', color: '#1E90FF' };     // Rojo anaranjado
@@ -197,7 +244,8 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         return { label: 'MUY BIEN', color: '#FF8C00' };                  // Verde oscuro
     };
 
-    // Función para analizar el sentimiento usando VADER
+    // FUNCTION TO ANALYZE THE FEELING USING VADER
+    // FUNCIÓN PARA ANALIZAR EL SENTIMIENTO USANDO VADER
     const analyzeSentimentWithVader = (text) => {
         const analysis = vader.SentimentIntensityAnalyzer.polarity_scores(text);
         const compoundScore = analysis.compound;
@@ -215,6 +263,49 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
     };
 
 
+    const askGemini = async () => {
+        const text = document.querySelector("#root > div > div.entry-container > div.diary-form > textarea").value;
+        const lang = window.localStorage.getItem('lang');
+
+        // Declara la constante promptText 
+        const promptText = lang === 'es'
+            ? `Texto: "${text}"\nPregunta: ¿explicame los sentimientos que inspira el texto?`
+            : `Text: "${text}"\nQuestion: Can you explain the feelings inspired by this text?`;
+
+
+        try {
+            const response = await axios.post(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY}`,
+                {
+                    contents: [
+                        {
+                            parts: [
+                                {
+                                    text: promptText,
+                                },
+                            ],
+                        },
+                    ],
+                    generationConfig: {
+                        candidateCount: 1,
+                    },
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            const geminiResponse = response.data.candidates[0].content.parts[0].text;
+            setAiAnswer(geminiResponse)
+            // console.log("Respuesta de Gemini:", geminiResponse);
+        } catch (error) {
+            console.error("Error al llamar a Gemini:", error.response?.data || error.message);
+        }
+    };
+
+    // CALL TO GOOGLEAPIS TO TRANSLATE THE TEXT THAT WILL BE ANALYZED BY VADER
+    // LLAMADA A GOOGLEAPIS PARA TRADUCIR EL TEXTO QUE SERÁ ANALIZADO POR VADER
     const translation = (entry) => {
         return new Promise((resolve, reject) => {
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=${encodeURI(entry)}`;
@@ -223,11 +314,11 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
                 .then((response) => response.json())
                 .then((json) => {
                     const translateResult = json[0].map((item) => item[0]).join("");
-                    console.log("Texto original:", entry);
-                    console.log("Traducción:", translateResult);
+                    // console.log("Texto original:", entry);
+                    // console.log("Traducción:", translateResult);
 
                     const mood = analyzeSentimentWithVader(translateResult);
-                    console.log("SENTIMIENTO:", mood.label);
+                    // console.log("SENTIMIENTO:", mood.label);
 
                     setMoodLabel(mood.label);
                     setMoodColor(mood.color);
@@ -241,11 +332,65 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
         });
     };
 
+    // METHOD TO FORMAT GEMINI'S RESPONSES THROUGH REGEX
+    // MÉTODO PARA DAR FORMATO A LAS RESPUESTAS DE GEMINI A TRAVÉS DE REGEX
+    const formatAiAnswer = (text) => {
+
+        // REPLACE * WITH <li>TEXT</li> 
+        // REEMPLAZAR * POR <li>TEXTO</li> 
+        text = text.replace(/^\*\s+(.*)$/gm, (match, p1) => `<li>${p1}</li>`);
+
+        // CONVERT LINE JUMPS INTO PARAGRAPHS
+        // CONVERTIR SALTOS DE LÍNEA EN PÁRRAFOS
+        text = text.replace(/([^\n]*\n?)/g, (match) => `<p>${match.trim()}</p>`);
+
+        // REMOVE EXTRA LINE JUMPS
+        // ELIMINAR SALTOS DE LÍNEA EXTRA
+        text = text.replace(/\n{2,}/g, '\n');
+
+        // REPLACE ** TEXT ** WITH <b>TEXT</b>
+        // REEMPLAZAR **TEXTO** POR <b>TEXTO</b>
+        text = text.replace(/\*\*([^\*]+)\*\*/g, (match, p1) => `<b>${p1}</b>`);
+
+        return text;
+    }
 
 
 
     return (
         <div className="diary-form">
+            <div
+                className='ai-analyzer'
+                onMouseOver={() => setAiIconSrc(`${process.env.PUBLIC_URL}/icon/AI/ai-white.gif`)}
+                onMouseOut={() => setAiIconSrc(`${process.env.PUBLIC_URL}/icon/AI/ai-white.png`)}
+            >
+                <p className='ai-analyzer-text'> PULSA SI DESEAS ANALIZAR TU DÍA &#8594; </p>
+                <img className='ai-analyzer-img' src={aiIconSrc} alt="AI Analyzer" onClick={openAiModal} />
+            </div>
+
+            {/* Modal AI */}
+            {aiModalOpen && (
+                <div className="ai-modal">
+                    <div className="ai-modal-content">
+                        {showAiSpinner ? (
+                            <img
+                                className="ai-analyzer-spinner"
+                                src={`${process.env.PUBLIC_URL}/icon/AI/ai-white.gif`}
+                                alt="AI Spinner"
+                            />
+                        ) : (
+                            <div className="ai-answer-content">
+                                {/* Si el aiAnswer contiene saltos de línea, los reemplazamos por etiquetas <br /> */}
+                                <p dangerouslySetInnerHTML={{ __html: formatAiAnswer(aiAnswer) }} />
+                            </div>
+                        )}
+                        <button onClick={closeAiModal} className='form-button'>Cerrar</button>
+                    </div>
+                </div>
+            )}
+
+
+
             <div className="header">
                 <h2>Entrada para: {new Date(date).toLocaleDateString(userLocale)}</h2>
             </div>
@@ -266,7 +411,7 @@ const DiaryForm = ({ date, onEntrySubmit }) => {
                     style={{ backgroundColor: moodColor || "#00BFFF" }}
                 ></div>
             </div>
-            <p className='mood-value'>{moodLabel}</p>  {/* Usar moodLabel en lugar de data.label */}
+            <p className='mood-value'>{moodLabel}</p>
 
             {modalOpen && <MoodTracker onSave={handleSaveMood} onClose={handleCloseModal} />}
 

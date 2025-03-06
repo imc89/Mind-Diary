@@ -133,8 +133,7 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to="/" className='home-container' onClick={closeMenus}>
-                    <img src={`${process.env.PUBLIC_URL}/icon.png`} alt="Logo" className="navbar-logoimg" />
-                    <h1 className="navbar-logo">Mind Diary</h1>
+                    <img src={`${process.env.PUBLIC_URL}/title/title.png`} alt="Logo" className="navbar-logoimg" />
                 </Link>
                 <div className='mobile-menu'>
                     <button className="navbar-toggle" onClick={toggleMenu}>

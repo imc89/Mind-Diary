@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "https://imc89.github.io/Mind-Diary",
   "dependencies": {
+    "@google/generative-ai": "^0.22.0",
+    "axios": "^1.8.1",
     "cra-template": "1.2.0",
     "date-fns": "^4.1.0",
     "papaparse": "^5.5.2",
@@ -13,7 +15,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.2",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "vader-sentiment": "^1.1.3"
   },
   "scripts": {

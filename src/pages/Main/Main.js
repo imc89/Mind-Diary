@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 // COMPONENTES
 import Calendar from 'react-calendar';
 import EntryContainer from '../../components/EntryContainer/EntryContainer';
+import DarkMode from '../../components/DarkMode/DarkMode';
+import LanguageSelector from '../../components/LanguageSelector/LanguageSelector';
 
 // VARIABLES
 // ESTILOS
@@ -12,8 +14,18 @@ import { userLocale } from '../../utils/utilsValues';
 // STYLES
 // ESTILOS
 import './Main.css';
+import './Main-Dark.css';
 
-const Main = () => {
+// ACCEPTS t AND language AS PROPS
+// ACEPTA t Y language COMO PROPIEDADES
+const Main = ({ t, language }) => {
+
+    useEffect(() => {
+        // REMOVE THE LANGUAGE FLAG FROM LOCAL STORAGE ON COMPONENT MOUNT
+        // ELIMINA LA MARCA DE IDIOMA DEL LOCALSTORAGE AL MONTAR EL COMPONENTE
+        window.localStorage.removeItem("langflag");
+    }, []);
+
     // STATE FOR THE SELECTED DATE IN THE CALENDAR
     // ESTADO PARA LA FECHA SELECCIONADA EN EL CALENDARIO
     const [date, setDate] = useState(new Date());
@@ -23,6 +35,9 @@ const Main = () => {
     // STATE FOR THE ACTIVE START DATE IN THE CALENDAR
     // ESTADO PARA LA FECHA DE INICIO ACTIVA EN EL CALENDARIO
     const [activeStartDate, setActiveStartDate] = useState(new Date());
+    // DARK MODE
+    // MODO OSCURO
+    const [isDarkMode, setIsDarkMode] = useState(false); // Estado para el modo oscuro
 
     // FUNCTION TO OPEN THE DATABASE
     // FUNCIÓN PARA ABRIR LA BASE DE DATOS
@@ -141,12 +156,31 @@ const Main = () => {
         // ACTUALIZA EL ESTADO CUANDO SE CAMBIA EL MES O AÑO
     };
 
+    // FUNCTION TO TOGGLE DARK MODE
+    // FUNCIÓN PARA ACTIVAR/DESACTIVAR EL MODO OSCURO
+    const handleToggle = () => {
+        // CAMBIA EL ESTADO AL VALOR OPUESTO
+        // CHANGE THE STATE TO THE OPPOSITE VALUE
+        setIsDarkMode(prevState => !prevState);
+    };
+
+    // SAVE DARK MODE STATE IN SESSION STORAGE
+    // GUARDA EL ESTADO DEL MODO OSCURO EN SESSION STORAGE
     useEffect(() => {
-        // CALL onEntrySubmit WHEN THE COMPONENT MOUNTS OR THE ACTIVE START DATE CHANGES
-        // LLAMA A onEntrySubmit CUANDO EL COMPONENTE SE MONTA O CUANDO CAMBIA LA FECHA INICIAL ACTIVA
-        onEntrySubmit();
+        // WHEN THE VALUE OF `isDarkMode` CHANGES, KEEP THE STATE IN THE SESSIONSTORAGE
+        // CUANDO EL VALOR DE `isDarkMode` CAMBIE, GUARDA EL ESTADO EN EL SESSIONSTORAGE
+        sessionStorage.setItem('darkMode', isDarkMode);
+    }, [isDarkMode]);
+
+
+    // CALL onEntrySubmit WHEN THE COMPONENT MOUNTS OR THE ACTIVE START DATE CHANGES
+    // LLAMA A onEntrySubmit CUANDO EL COMPONENTE SE MONTA O CUANDO CAMBIA LA FECHA INICIAL ACTIVA
+    useEffect(() => {
+        onEntrySubmit(); // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeStartDate]);
 
+    // FUNCTION TO DELETE AN ENTRY
+    // FUNCIÓN PARA ELIMINAR UNA ENTRADA
     const handleDelete = async (id, date) => {
         // OPEN THE DATABASE
         // ABRE LA BASE DE DATOS
@@ -191,6 +225,8 @@ const Main = () => {
         };
     };
 
+    // FUNCTION TO SELECT THE CURRENT DATE  
+    // FUNCIÓN PARA SELECCIONAR LA FECHA ACTUAL
     const handleCurrentDate = () => {
         const today = new Date();
         setDate(today);
@@ -200,16 +236,18 @@ const Main = () => {
     return (
         <div>
             <div className="header">
-                <h1>Mind Diary</h1>
+                <DarkMode onToggle={handleToggle} />
+                <LanguageSelector />
+                <img className="app-title-img" src={`${isDarkMode ? process.env.PUBLIC_URL + '/title/dark-title.png' : process.env.PUBLIC_URL + '/title/title.png'}`} alt="app title" />
             </div>
 
             <div className="current-date-container">
-                <button className="current-date" onClick={handleCurrentDate}>FECHA ACTUAL</button>
+                <button className="current-date" onClick={handleCurrentDate}>{t("current-date")}</button>
             </div>
-
             <Calendar
                 onChange={onDateChange}
                 value={date}
+                locale={language}
                 showNeighboringMonth={false}
                 onActiveStartDateChange={handleActiveStartDateChange}
                 tileClassName={({ date }) => {

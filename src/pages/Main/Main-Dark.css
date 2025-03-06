@@ -1,0 +1,41 @@
+body{
+    background-image: linear-gradient( 180deg,  rgba(204, 239, 244,1) 0%, rgba(39, 128, 141,1)  65% );
+}
+
+/* body button  {
+    background: #4196A2 !important;
+    color: #202020 !important;
+}
+
+body button:hover  {
+    background: #26808d !important;
+} */
+
+/* Estilos para el modo oscuro */
+body.dark-mode {
+    background-image: none;
+    background-color: #202020;
+    color: white;
+}
+
+body.dark-mode p {
+    color: black;
+}
+
+body.dark-mode button  {
+    background: #26808d;
+}
+
+body.dark-mode button:hover {
+    background: #cceff4;
+    color:#202020;
+}
+
+body.dark-mode .file-label  {
+    background: #26808d;
+}
+
+body.dark-mode .file-label:hover {
+    background: #cceff4;
+    color:#202020;
+}
