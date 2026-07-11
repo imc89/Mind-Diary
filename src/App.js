@@ -56,12 +56,12 @@ function App() {
                 <SplashScreen onFinish={handleSplashFinish} />
             ) : (
                 <>
-                    <Navbar />
+                    <Navbar t={t} />
                     <Routes>
                         <Route path="/" element={<Main t={t} language={language} />} />
-                        <Route path="/search" element={<Search />} />
-                        <Route path="/image" element={<Images />} />
-                        <Route path="/graph" element={<Graph />} />
+                        <Route path="/search" element={<Search t={t} language={language}/>} />
+                        <Route path="/image" element={<Images t={t}/>} />
+                        <Route path="/graph" element={<Graph t={t}/>} />
                     </Routes>
                 </>
             )}

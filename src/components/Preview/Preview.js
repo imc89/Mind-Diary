@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import './Preview.css';
 
+import AiMoodInterpreter from '../AiMoodInterpreter/AiMoodInterpreter'
+
 import { userLocale } from '../../utils/utilsValues';
 
-const Preview = ({ date, entries, deleteEntry }) => {
+const Preview = ({ date, entries, deleteEntry, t, language }) => {
     // Convert the selected date to a string format for searching in the entries
     // Convierte la fecha seleccionada a un formato de cadena para buscar en las entradas
     const selectedDate = new Date(date).toLocaleDateString(userLocale)
@@ -81,13 +83,13 @@ const Preview = ({ date, entries, deleteEntry }) => {
                     // Filter entries that match the selected date
                     // Filtra las entradas que coinciden con la fecha seleccionada
                     const filteredEntries = allEntries.filter(entry => {
-                           // Split the date and rearrange to the desired format
+                        // Split the date and rearrange to the desired format
                         // Divide la fecha y reorganiza al formato deseado
                         const [day, month, year] = entry.date.split('/').map(Number);
                         let entryDate = new Date(year, month - 1, day).toLocaleDateString(userLocale);; // Meses en JavaScript son 0-11
 
                         // let entryDate = new Date(entry.date).toLocaleDateString(userLocale);
-                   
+
                         return entryDate === selectedDate;
                     });
                     // Update the state with the filtered entries
@@ -114,12 +116,14 @@ const Preview = ({ date, entries, deleteEntry }) => {
 
     return (
         <div className="preview-container">
-            <h3>Entradas para {selectedDate}</h3>
+
+            <h3>{t('preview-entry-date')} {new Date(date).toLocaleDateString(language)}</h3>
             {dailyEntries.length > 0 ? (
                 dailyEntries.map((entry) => (
                     <div key={entry.id} className="entry-preview">
-                        <h4 id="entry-title">ENTRADA</h4>
-                        <p>{entry.entry.charAt(0).toUpperCase() + entry.entry.slice(1) || "Sin texto para esta entrada"}</p>
+                        <AiMoodInterpreter promtData={entry.entry} t={t} language={language} />
+                        <h4 id="entry-title">{t('preview-entry')}</h4>
+                        <p className="entry-preview-text">{entry.entry.charAt(0).toUpperCase() + entry.entry.slice(1) || "Sin texto para esta entrada"}</p>
                         {entry.image && (
                             <img
                                 src={entry.image}
@@ -127,7 +131,7 @@ const Preview = ({ date, entries, deleteEntry }) => {
                                 className="preview-image"
                             />
                         )}
-                         <h4>Este día te sentías : {entry.moodLabel || "NORMAL"}</h4>
+                        <h4>{t('preview-day-feelings')} {entry.moodLabel || "NORMAL"}</h4>
                         <div
                             className="entry-color-indicator"
                             style={{ backgroundColor: entry.moodColor || "#00BFFF" }}
@@ -136,13 +140,13 @@ const Preview = ({ date, entries, deleteEntry }) => {
                             onClick={() => deleteEntry(entry.id, selectedDate)}
                             className="delete-button"
                         >
-                            <FaTrash id='delete-icon'/>
-                            <span id="delete-text">Eliminar</span>
+                            <FaTrash id='delete-icon' />
+                            <span id="delete-text">{t('preview-entry-delete')}</span>
                         </button>
                     </div>
                 ))
             ) : (
-                <p>No hay entradas para este día.</p>
+                <p>{t('preview-no-entries')}</p>
             )}
         </div>
     );

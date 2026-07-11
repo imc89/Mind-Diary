@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaTrash } from 'react-icons/fa';
 import './SearchText.css';
+import AiMoodInterpreter from '../../components/AiMoodInterpreter/AiMoodInterpreter'
 
 
-const SearchText = () => {
+const SearchText = ({ t, language }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredEntries, setFilteredEntries] = useState([]);
     const [allEntries, setAllEntries] = useState([]);
@@ -85,26 +86,12 @@ const SearchText = () => {
 
     return (
         <div className="search-text-container">
-            <h1 className="title-search-text">Buscar Entradas</h1>
+            <h1 className="title-search-text">{t('search-text-title')}</h1>
 
-
-            {/* <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="Buscar texto..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)} // Actualiza el texto mientras el usuario escribe
-                    onKeyPress={handleKeyPress} // Detecta la tecla Enter
-                    className="search-input"
-                />
-                <button onClick={handleSearch} className="search-button">
-                    <FaSearch />
-                </button>
-            </div> */}
             <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="Buscar texto..."
+                    placeholder={t('search-text-placeholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)} // Actualiza el texto mientras el usuario escribe
                     onKeyPress={handleKeyPress} // Detecta la tecla Enter
@@ -120,6 +107,9 @@ const SearchText = () => {
                 {filteredEntries.length > 0 ? (
                     filteredEntries.map((entry) => (
                         <div key={entry.id} className="entry-card">
+                            <div>
+                            <AiMoodInterpreter promtData={entry.entry} t={t} language={language} />
+                            </div>
                             <h3>{entry.date}</h3>
                             <p>{entry.entry}</p>
                             {entry.image && <img src={entry.image} alt="Imagen de la entrada" className="entry-image" />}
@@ -129,7 +119,7 @@ const SearchText = () => {
                         </div>
                     ))
                 ) : (
-                    <p className='no-found-search'>No se encontraron entradas que coincidan con la búsqueda.</p>
+                    <p className='no-found-search'>{t('search-text-not-found')}</p>
                 )}
             </div>
         </div>

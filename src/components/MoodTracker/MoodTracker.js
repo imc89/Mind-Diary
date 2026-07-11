@@ -7,7 +7,7 @@ import './MoodTracker.css';
 
 // DEFINE THE MoodTracker COMPONENT THAT RECEIVES THE onSave AND onClose
 // DEFINE EL COMPONENTE MoodTracker QUE RECIBE LAS PROPS onSave Y onClose
-const MoodTracker = ({ onSave, onClose }) => {
+const MoodTracker = ({ onSave, onClose, t, language }) => {
     // STATE FOR THE VALUE OF THE SLIDER, BY DEFAULT IN 50 (NORMAL)
     // ESTADO PARA EL VALOR DEL SLIDER, POR DEFECTO EN 50 (NORMAL)
     const [sliderValue, setSliderValue] = useState('50');
@@ -23,7 +23,9 @@ const MoodTracker = ({ onSave, onClose }) => {
     const colors = ['#8A2BE2', '#1E90FF', '#4682B4', '#00BFFF', '#32CD32', '#FFD700', '#FF8C00'];
     // ARRAY OF TAGS FOR MOOD
     // ARRAY DE ETIQUETAS PARA EL ESTADO DE ANIMO
-    const labels = ["MUY MAL", "MAL", "ALGO MAL", "NORMAL", "ALGO BIEN", "BIEN", "MUY BIEN"];
+    const labels =  (language === "es"|| language === null )
+    ? ["MUY MAL", "MAL", "ALGO MAL", "NORMAL", "ALGO BIEN", "BIEN", "MUY BIEN"]
+    : ["VERY BAD", "BAD", "BIT DOWN", "NORMAL", "BIT OKAY", "GOOD", "VERY GOOD"];
 
     // APPLY THE COLOR CHANGE TO THE ANIMATION WHEN ASSEMBLING THE COMPONENT TO ENSURE THAT ANIMATION IS SHOWN
     // APLICA EL CAMBIO DE COLOR A LA ANIMACION AL MONTAR EL COMPONENTE PARA ASEGURAR QUE SE MUESTRE LA ANIMACION
@@ -149,7 +151,7 @@ const MoodTracker = ({ onSave, onClose }) => {
                     />
                 </div>
 
-                <button className="accept-mood" onClick={handleSave}>Aceptar</button>
+                <button className="accept-mood" onClick={handleSave}>{t('moodtracker-accept')}</button>
             </div>
         </div>
     );

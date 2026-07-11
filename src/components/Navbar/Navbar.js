@@ -7,7 +7,7 @@ import { MdDelete } from "react-icons/md";
 import Papa from 'papaparse';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ t }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isTransferOpen, setIsTransferOpen] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -15,6 +15,7 @@ const Navbar = () => {
     const [fileName, setFileName] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");  // Mensaje dinámico del modal
+    const [modalClass, setModalClass] = useState("modal"); //clase de css de la moda
     const [showCancelButton, setShowCancelButton] = useState(true);  // Estado para controlar la visibilidad del botón "Cancelar"
     const [modalAction, setModalAction] = useState(() => () => { });  // Acción que se ejecutará al hacer clic en "Aceptar"
 
@@ -42,10 +43,11 @@ const Navbar = () => {
         setFileName("");
     };
 
-    const openModal = (message, action, showCancelButton = true) => {
+    const openModal = (message, action, showCancelButton = true, modalClass = "modal") => {
         setModalMessage(message);
-        setModalAction(() => action);  // Asignar la acción que se ejecutará al hacer clic en "Aceptar"
-        setShowCancelButton(showCancelButton);  // Establecer si el botón "Cancelar" debe mostrarse
+        setModalAction(() => action);
+        setShowCancelButton(showCancelButton);
+        setModalClass(modalClass);  // Guardamos la clase personalizada del modal
         setIsModalOpen(true);
     };
 
@@ -108,7 +110,7 @@ const Navbar = () => {
 
                         transaction.oncomplete = () => {
                             closeImportModal(); // Cerrar el modal de importación
-                            openModal("La importación de datos se completó con éxito.", () => window.location.reload(), false);
+                            openModal(t('modal-import-success'), () => window.location.reload(), false, "modal-delete");
                         };
 
                         transaction.onerror = () => {
@@ -125,7 +127,8 @@ const Navbar = () => {
                 header: true,  // Si el CSV tiene encabezado
             });
         } else {
-            openModal("Por favor, selecciona un archivo .csv válido.", () => { }); // Mensaje de alerta si no es un archivo CSV
+            closeImportModal();
+            openModal(t('modal-import-invalid'), () => { }, false, "modal-delete");
         }
     };
 
@@ -146,10 +149,10 @@ const Navbar = () => {
                     </button>
                 </div>
                 <ul className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
-                    <Link to="/search" onClick={closeMenus}> <li className="navbar-item">Búsqueda</li> </Link>
-                    <Link to="/image" onClick={closeMenus}> <li className="navbar-item">Imágenes</li> </Link>
-                    <Link to="/graph" onClick={closeMenus}> <li className="navbar-item">Gráficos</li> </Link>
-                    <Link to="/help" onClick={closeMenus}> <li className="navbar-item">Ayuda</li> </Link>
+                    <Link to="/search" onClick={closeMenus}> <li className="navbar-item">{t('navbar-search-text')}</li> </Link>
+                    <Link to="/image" onClick={closeMenus}> <li className="navbar-item">{t('navbar-search-img')}</li> </Link>
+                    <Link to="/graph" onClick={closeMenus}> <li className="navbar-item">{t('navbar-graph')}</li> </Link>
+                    <Link to="/help" onClick={closeMenus}> <li className="navbar-item">{t('navbar-help')}</li> </Link>
                     <li className='navbar-item desktop-only' onClick={toggleTransfer}>
                         <FaExchangeAlt />
                     </li>
@@ -157,15 +160,15 @@ const Navbar = () => {
                 <ul className={`transfer ${isTransferOpen ? 'active' : ''}`}>
                     <li className="transfer-icon export" onClick={() => { exportToCSV(); closeMenus(); }}>
                         <BiExport />
-                        <span className='export-tag'>EXPORTAR</span>
+                        <span className='export-tag'>{t('navbar-export')}</span>
                     </li>
                     <li className="transfer-icon import" onClick={openImportModal}>
                         <BiImport />
-                        <span className='import-tag'>IMPORTAR</span>
+                        <span className='import-tag'>{t('navbar-import')}</span>
                     </li>
                     <li className="transfer-icon delete" onClick={() => openModal("¿ESTÁS SEGURO DE QUE DESEAS ELIMINAR TODO EL CONTENIDO DE LA APLICACIÓN?", deleteIndexedDB)}>
                         <MdDelete />
-                        <span className='delete-tag'>ELIMINAR</span>
+                        <span className='delete-tag'>{t('navbar-delete')}</span>
                     </li>
                 </ul>
             </div>
@@ -173,12 +176,12 @@ const Navbar = () => {
             {/* Modal reutilizable */}
             {isModalOpen && (
                 <div className="modal-overlay">
-                    <div className="modal">
+                    <div className={showCancelButton ? "modal-delete" : modalClass}>
                         <p>{modalMessage}</p>
                         <div className="modal-buttons">
-                            <button onClick={() => { modalAction(); closeModal(); }} className="modal-accept">Aceptar</button>
+                            <button onClick={() => { modalAction(); closeModal(); }} className="modal-accept">{t('modal-accept')}</button>
                             {showCancelButton && (
-                                <button onClick={closeModal} className="modal-cancel">Cancelar</button>
+                                <button onClick={closeModal} className="modal-cancel">{t('modal-cancel')}</button>
                             )}
                         </div>
                     </div>
@@ -195,7 +198,7 @@ const Navbar = () => {
                 >
                     <div onClick={() => document.getElementById('file-input').click()} className={`modal ${isDragOver ? 'drag-over' : ''}`}>
                         <p>
-                            Selecciona o arrastra un archivo .csv para importar
+                            {t('modal-import')}
                         </p>
                         <input
                             type="file"
@@ -207,7 +210,7 @@ const Navbar = () => {
                         />
                         {fileName && <p className="file-name">Archivo seleccionado: {fileName}</p>}
                         <button onClick={(event) => { event.stopPropagation(); closeImportModal(); }} className="modal-cancel">
-                            Cancelar
+                            {t('modal-cancel')}
                         </button>
                     </div>
                 </div>

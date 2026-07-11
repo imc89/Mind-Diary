@@ -14,8 +14,8 @@
     max-width: 900px;
     margin: 0 auto;
     text-align: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
 }
-
 .graph-date {
     text-transform: uppercase;
     padding: 10px;

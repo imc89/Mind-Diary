@@ -5,7 +5,7 @@ import './SearchImages.css'
 import { userLocale } from '../../utils/utilsValues';
 
 
-const SearchImages = () => {
+const SearchImages = ({ t }) => {
     const [entriesWithImages, setEntriesWithImages] = useState([]);
 
     // Function to fetch entries with images from the IndexedDB
@@ -65,7 +65,7 @@ const SearchImages = () => {
 
     return (
         <div className="search-images-container">
-            <h1 className="title-search-image">Entradas con Imágenes</h1>
+            <h1 className="title-search-image">{t('search-img-title')}</h1>
             <div className="entries-list">
                 {entriesWithImages.length > 0 ? (
                     entriesWithImages.map((entry) => (
@@ -79,7 +79,7 @@ const SearchImages = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No hay entradas con imágenes.</p>
+                    <p className='no-found-search'>{t('search-img-not-found')}</p>
                 )}
             </div>
         </div>

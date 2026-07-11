@@ -169,7 +169,10 @@ const Main = ({ t, language }) => {
     useEffect(() => {
         // WHEN THE VALUE OF `isDarkMode` CHANGES, KEEP THE STATE IN THE SESSIONSTORAGE
         // CUANDO EL VALOR DE `isDarkMode` CAMBIE, GUARDA EL ESTADO EN EL SESSIONSTORAGE
-        sessionStorage.setItem('darkMode', isDarkMode);
+        const storedMode = sessionStorage.getItem('darkMode');
+        if (storedMode === 'false') {
+            sessionStorage.setItem('darkMode', false);
+        }
     }, [isDarkMode]);
 
 
@@ -238,11 +241,17 @@ const Main = ({ t, language }) => {
             <div className="header">
                 <DarkMode onToggle={handleToggle} />
                 <LanguageSelector />
-                <img className="app-title-img" src={`${isDarkMode ? process.env.PUBLIC_URL + '/title/dark-title.png' : process.env.PUBLIC_URL + '/title/title.png'}`} alt="app title" />
+                <img
+                    className="app-title-img"
+                    src={`${window.sessionStorage.getItem('darkMode') === 'true'
+                        ? process.env.PUBLIC_URL + '/title/dark-title.png'
+                        : process.env.PUBLIC_URL + '/title/title.png'}`}
+                    alt="app title"
+                />
             </div>
 
             <div className="current-date-container">
-                <button className="current-date" onClick={handleCurrentDate}>{t("current-date")}</button>
+                <button className="current-date" onClick={handleCurrentDate}>{t('main-current-date')}</button>
             </div>
             <Calendar
                 onChange={onDateChange}
@@ -257,7 +266,7 @@ const Main = ({ t, language }) => {
                 tileDisabled={tileDisabled}
                 activeStartDate={activeStartDate} // Asegura que el calendario refleje el mes correcto
             />
-            <EntryContainer date={date} onEntrySubmit={onEntrySubmit} entries={entries} deleteEntry={handleDelete} />
+            <EntryContainer date={date} onEntrySubmit={onEntrySubmit} entries={entries} deleteEntry={handleDelete} t={t} language={language} />
         </div>
     );
 };

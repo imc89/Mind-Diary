@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2';
 import './Graph.css';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { parse, format, isValid } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { es, enUS } from 'date-fns/locale';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,32 +26,54 @@ ChartJS.register(
   Legend
 );
 
-// Etiquetas para los estados de ánimo
-const moodLabels = {
-  1: 'MUY MAL',
-  2: 'MAL',
-  3: 'ALGO MAL',
-  4: 'NORMAL',
-  5: 'ALGO BIEN',
-  6: 'BIEN',
-  7: 'MUY BIEN'
-};
 
-// Función para convertir una etiqueta de estado de ánimo en un valor numérico
-const getMoodValue = (mood) => {
-  const moodMap = {
-    'MUY MAL': 1,
-    'MAL': 2,
-    'ALGO MAL': 3,
-    'NORMAL': 4,
-    'ALGO BIEN': 5,
-    'BIEN': 6,
-    'MUY BIEN': 7
+const Graph = ({ t }) => {
+
+  let language = window.localStorage.getItem('lang');
+  // const language = window.localStorage.getItem('lang');
+  // Etiquetas para los estados de ánimo
+  const moodLabels = (language === 'es' || language === null || language === undefined) ? {
+    1: 'MUY MAL',
+    2: 'MAL',
+    3: 'ALGO MAL',
+    4: 'NORMAL',
+    5: 'ALGO BIEN',
+    6: 'BIEN',
+    7: 'MUY BIEN'
+  } : {
+    1: 'VERY BAD',
+    2: 'BAD',
+    3: 'BIT DOWN',
+    4: 'NORMAL',
+    5: 'BIT OKAY',
+    6: 'GOOD',
+    7: 'VERY GOOD'
   };
-  return moodMap[mood] || 4; // Por defecto, devuelve 4 (NORMAL)
-};
 
-const Graph = () => {
+  // Función para convertir una etiqueta de estado de ánimo en un valor numérico
+  const getMoodValue = (mood, language) => {
+    const esArray =["MUY MAL", "MAL", "ALGO MAL", "NORMAL", "ALGO BIEN", "BIEN", "MUY BIEN"]
+    const moodMap = (esArray.includes(mood)) ? {
+      'MUY MAL': 1,
+      'MAL': 2,
+      'ALGO MAL': 3,
+      'NORMAL': 4,
+      'ALGO BIEN': 5,
+      'BIEN': 6,
+      'MUY BIEN': 7
+    } : {
+      'VERY BAD': 1,
+      'BAD': 2,
+      'BIT DOWN': 3,
+      'NORMAL': 4,
+      'BIT OKAY': 5,
+      'GOOD': 6,
+      'VERY GOOD': 7
+    };
+
+    return moodMap[mood] || 4; // Por defecto, devuelve 4 (NORMAL)
+  };
+
   const [graphData, setGraphData] = useState({
     labels: [],
     datasets: []
@@ -178,7 +200,7 @@ const Graph = () => {
   useEffect(() => {
     console.log(graphData); // Este console.log se ejecutará cada vez que graphData cambie
   }, [graphData]); // Se activa solo cuando graphData cambia
-  
+
   // Funciones para navegar entre meses y años
   const goToPreviousMonth = () => {
     if (currentMonth === 0) {
@@ -208,24 +230,24 @@ const Graph = () => {
 
   return (
     <div className="graph-container">
-      <h2>Gráfica de Estados de Ánimo</h2>
+      <h2>{t('graph-title')}</h2>
 
       {/* Fila 1 */}
       <div className='graph-menu-display-first'>
-        <button onClick={goToCurrentMonth} className='graph-menu-button'>Mes Actual</button>
+        <button onClick={goToCurrentMonth} className='graph-menu-button'>{t('graph-current-month')}</button>
       </div>
 
       {/* Fila 2 */}
       <div className='graph-menu-display-second'>
         <button onClick={goToPreviousMonth} className='graph-menu-button'>
           <MdKeyboardArrowLeft />
-          Mes Anterior
+          {t('graph-previous-month')}
         </button>
         <span className='graph-date'>
-          {format(new Date(currentYear, currentMonth), 'MMMM yyyy', { locale: es })}
+          {format(new Date(currentYear, currentMonth), 'MMMM yyyy', { locale: language === 'es' ? es : enUS })}
         </span>
         <button onClick={goToNextMonth} className='graph-menu-button'>
-          Mes Siguiente
+          {t('graph-next-month')}
           <MdKeyboardArrowRight />
         </button>
       </div>
@@ -234,10 +256,10 @@ const Graph = () => {
       <div className='graph-menu-display-third'>
         <button onClick={goToSameMonthLastYear} className='graph-menu-button'>
           <MdKeyboardDoubleArrowLeft />
-          Año Anterior
+          {t('graph-previous-year')}
         </button>
         <button onClick={goToSameMonthNextYear} className='graph-menu-button'>
-          Año Siguiente
+          {t('graph-next-year')}
           <MdKeyboardDoubleArrowRight />
         </button>
       </div>
@@ -251,28 +273,42 @@ const Graph = () => {
               data={graphData}
               options={{
                 responsive: true,
-                maintainAspectRatio: true, // Esto ayudará a que el gráfico se ajuste al tamaño del contenedor
+                maintainAspectRatio: true,
                 interaction: {
-                  mode: 'nearest',  // 'nearest' detecta el punto más cercano al toque o clic
-                  axis: 'x',        // Limita la interacción solo al eje X (si es necesario)
-                  intersect: true, // Permite que se muestre el tooltip incluso si el puntero no está exactamente sobre el punto
+                  mode: 'nearest',
+                  axis: 'x',
+                  intersect: true,
                 },
                 scales: {
                   y: {
-                    min: 1,  // Asegúrate de que el rango esté correcto
+                    min: 1,
                     max: 7,
+                    grid: {
+                      color: sessionStorage.getItem("darkMode") === "true" ? "white" : "rgba(0, 0, 0, 0.1)"
+                    },
                     ticks: {
                       stepSize: 1,
                       callback: (value) => moodLabels[value] || value,
+                      color: sessionStorage.getItem("darkMode") === "true" ? "white" : "black", // Cambia el color del texto del eje Y a negro
+                      font: {
+                        weight: 'bold', // Pone el texto en negrita
+                      },
                     },
                     offset: true,
                   },
                   x: {
                     min: graphData.labels[0],
                     max: graphData.labels[graphData.labels.length - 1],
+                    grid: {
+                      color: sessionStorage.getItem("darkMode") === "true" ? "white" : "rgba(0, 0, 0, 0.1)"
+                    },
                     ticks: {
                       autoSkip: false,
                       maxRotation: 0,
+                      color: sessionStorage.getItem("darkMode") === "true" ? "white" : "black", // Cambia el color del texto del eje X a negro
+                      font: {
+                        weight: 'bold', // Pone el texto en negrita
+                      },
                     },
                     categoryPercentage: 0.5,
                     barPercentage: 0.5,
@@ -283,7 +319,7 @@ const Graph = () => {
                     display: false,
                   },
                   tooltip: {
-                    enabled: true,  // Asegúrate de que los tooltips estén habilitados
+                    enabled: true,
                     callbacks: {
                       label: (tooltipItem) => {
                         const moodValue = tooltipItem.raw;

@@ -121,18 +121,18 @@ a {
     margin: 0;
     position: absolute;
     top: 58px;
-    right: 0px;
-    width: 75px;
-    height: 148px;
+    right: 0;
+    width: 90px;
     background: #1976d2;
     color: white;
     border-radius: 0 0 0 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     z-index: 10;
     padding: 0;
-    padding-bottom: 5px;
     display: none;
     flex-direction: column;
+    align-items: center;
+    gap: 5px;
     animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -147,52 +147,52 @@ a {
         opacity: 0;
         transform: translateY(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
+/* Cada ítem del menú */
 .transfer-icon {
-    padding: 10px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 12px 0;
     cursor: pointer;
-    font-size: 25px;
+    transition: background 0.2s;
 }
 
-.export {
-    border-bottom: solid white;
+/* Efecto hover */
+.transfer-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-.import {
-    border-bottom: solid white;
+/* Contenedor que asegura que el ícono y el texto estén alineados en columna */
+.icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 4px; /* Separa el icono del texto */
 }
 
-/* Ajusta el texto para que esté pegado abajo del icono */
-.export-tag {
-    font-size: 10px;
-    position: absolute;
-    top: 24%;
-    left: 15%;
+/* Tamaño del icono */
+.icon {
+    font-size: 22px;
 }
 
-.import-tag {
-    font-size: 10px;
-    position: absolute;
-    top: 56%;
-    left: 15%;
-}
-
-.delete-tag {
-    font-size: 10px;
-    position: absolute;
-    top: 91%;
-    left: 21%;
-}
-
-.transfer li:hover {
-    background-color: rgba(0, 0, 0, 0.12);
+/* Tamaño de los tags y centrado */
+.export-tag, .import-tag, .delete-tag {
+    font-size: 12px;
+    text-align: center;
+    display: block;
+    line-height: 1.2;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
 }
 
 .modal-overlay {
@@ -218,6 +218,18 @@ a {
     max-width: 400px;
     cursor: pointer;
 }
+
+.modal-delete {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+}
+
 
 .modal:hover {
     border: 2px dashed #4CAF50;
@@ -290,7 +302,7 @@ a {
 
     .navbar-item {
         font-size: 18px;
-        width: 70%;
+        width: 175px;
         border: solid white;
         text-align: center;
         padding: 12px 30px;

@@ -5,11 +5,11 @@ import Preview from '../Preview/Preview';
 // STYLES
 import './EntryContainer.css';
 
-const EntryContainer = ({ date, onEntrySubmit, entries, deleteEntry }) => {
+const EntryContainer = ({ date, onEntrySubmit, entries, deleteEntry, t, language }) => {
     return (
         <div className="entry-container">
-            <DiaryForm date={date} onEntrySubmit={onEntrySubmit} />
-            <Preview date={date} entries={entries} deleteEntry={deleteEntry} />
+            <DiaryForm date={date} onEntrySubmit={onEntrySubmit} t={t} language={language}/>
+            <Preview date={date} entries={entries} deleteEntry={deleteEntry}  t={t} language={language} />
         </div>
     );
 };
