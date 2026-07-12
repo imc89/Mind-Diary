@@ -1,28 +1,13 @@
 import React, { useState, useRef } from 'react';
 import './AiMoodInterpreter.css';
 
-// Modelos en orden de prioridad (si el primero da 429, se prueba el siguiente)
-const MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash'];
-const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+// Modelo confirmado como funcional
+const MODEL = 'gemini-3-flash-preview';
+const STORAGE_KEY = 'gemini_api_key';
 
-const geminiUrl = (model) =>
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
+const geminiUrl = (apiKey) =>
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
 
-// Retry con backoff exponencial: espera 1s, 2s, 4s entre intentos
-const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
-    for (let attempt = 0; attempt < retries; attempt++) {
-        const response = await fetch(url, options);
-        if (response.status !== 429) return response;
-        if (attempt < retries - 1) {
-            const waitTime = delay; // capturamos el valor actual antes del closure
-            console.warn(`429 recibido. Reintentando en ${waitTime}ms... (intento ${attempt + 1}/${retries})`);
-            await new Promise(res => setTimeout(res, waitTime));
-            delay *= 2; // backoff exponencial
-        }
-    }
-    // Último intento sin capturar el 429
-    return fetch(url, options);
-};
 
 const AiMoodInterpreter = ({ promtData, t, language }) => {
 
@@ -50,6 +35,14 @@ const AiMoodInterpreter = ({ promtData, t, language }) => {
 
 
     const askGemini = async () => {
+        const API_KEY = localStorage.getItem(STORAGE_KEY);
+
+        if (!API_KEY) {
+            setAiAnswer('⚙️ No tienes configurada una API Key. Ve a Configuración para añadirla.');
+            setShowAiSpinner(false);
+            return;
+        }
+
         const text = promtData;
         const lang = window.localStorage.getItem('lang');
 
@@ -61,31 +54,22 @@ const AiMoodInterpreter = ({ promtData, t, language }) => {
         const body = JSON.stringify({
             contents: [{ parts: [{ text: promptText }] }]
         });
-        const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body };
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body
+        };
 
         try {
-            let geminiResponse = null;
+            const response = await fetch(geminiUrl(API_KEY), options);
+            const data = await response.json();
 
-            // Intentar con cada modelo hasta obtener respuesta válida
-            for (const model of MODELS) {
-                const response = await fetchWithRetry(geminiUrl(model), options);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    geminiResponse = data.candidates[0].content.parts[0].text;
-                    break; // éxito, salimos del bucle
-                }
-
-                const errorData = await response.json();
-                console.warn(`Modelo ${model} falló (${response.status}):`, errorData?.error?.message);
-                // Si no es 429 o 503, no tiene sentido probar el siguiente modelo
-                if (response.status !== 429 && response.status !== 503) break;
-            }
-
-            if (geminiResponse) {
-                setAiAnswer(geminiResponse);
+            if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                setAiAnswer(data.candidates[0].content.parts[0].text);
             } else {
-                setAiAnswer('⚠️ No se pudo obtener respuesta de la IA. Inténtalo de nuevo más tarde.');
+                const errMsg = data?.error?.message || 'Error desconocido';
+                console.warn('Gemini error:', errMsg);
+                setAiAnswer(`⚠️ Error al obtener respuesta: ${errMsg}`);
             }
 
         } catch (error) {

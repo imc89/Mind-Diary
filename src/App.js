@@ -5,6 +5,7 @@ import Main from './pages/Main/Main';
 import Search from './pages/SearchText/SearchText';
 import Images from './pages/SearchImages/SearchImages';
 import Graph from './pages/Graph/Graph';
+import Settings from './pages/Settings/Settings';
 
 // COMPONENTS
 import Navbar from './components/Navbar/Navbar';
@@ -62,6 +63,7 @@ function App() {
                         <Route path="/search" element={<Search t={t} language={language}/>} />
                         <Route path="/image" element={<Images t={t}/>} />
                         <Route path="/graph" element={<Graph t={t}/>} />
+                        <Route path="/help" element={<Settings t={t}/>} />
                     </Routes>
                 </>
             )}

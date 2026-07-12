@@ -1,0 +1,325 @@
+/* ===== SETTINGS PAGE ===== */
+.settings-page {
+    min-height: calc(100vh - 58px);
+    margin-top: 58px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%);
+}
+
+.settings-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(25, 118, 210, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 40px;
+    width: 100%;
+    max-width: 580px;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== HEADER ===== */
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.settings-icon {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.settings-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.settings-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.3px;
+}
+
+.settings-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* ===== STATUS BADGE ===== */
+.settings-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 28px;
+    transition: all 0.3s ease;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-inactive {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.status-active .status-dot {
+    background: #22c55e;
+}
+
+.status-inactive .status-dot {
+    background: #f59e0b;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ===== SECTION ===== */
+.settings-section {
+    margin-bottom: 28px;
+}
+
+.settings-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.settings-description {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 14px 0;
+    line-height: 1.5;
+}
+
+/* ===== INPUT ===== */
+.settings-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.settings-input {
+    width: 100%;
+    padding: 13px 48px 13px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    color: #1f2937;
+    background: #f9fafb;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.settings-input:focus {
+    border-color: #1976d2;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
+}
+
+.settings-input::placeholder {
+    color: #9ca3af;
+    font-family: inherit;
+}
+
+.settings-toggle-btn {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.settings-toggle-btn:hover {
+    color: #1976d2;
+    background: rgba(25, 118, 210, 0.08);
+}
+
+.settings-masked-preview {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 8px 0 0 4px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.settings-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.settings-save-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 13px 24px;
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.25);
+}
+
+.settings-save-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.35);
+}
+
+.settings-save-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.settings-save-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.settings-save-btn.saved {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+}
+
+.settings-delete-btn {
+    padding: 13px 20px;
+    background: transparent;
+    color: #ef4444;
+    border: 2px solid #fca5a5;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.settings-delete-btn:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    transform: translateY(-1px);
+}
+
+/* ===== INFO BOX ===== */
+.settings-info-box {
+    display: flex;
+    gap: 14px;
+    background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.settings-info-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.settings-info-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e40af;
+    margin: 0 0 4px 0;
+}
+
+.settings-info-text {
+    font-size: 13px;
+    color: #3b82f6;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.settings-info-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1976d2;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.settings-info-link:hover {
+    color: #1565c0;
+    text-decoration: underline;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .settings-page {
+        padding: 20px 12px;
+    }
+
+    .settings-card {
+        padding: 24px 20px;
+    }
+
+    .settings-title {
+        font-size: 20px;
+    }
+
+    .settings-actions {
+        flex-direction: column;
+    }
+
+    .settings-save-btn,
+    .settings-delete-btn {
+        width: 100%;
+    }
+}
